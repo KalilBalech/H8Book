@@ -5,7 +5,6 @@ import '../../config/my_colors.dart';
 import '../Biblioteca/continuar_biblioteca.dart';
 
 class SuaBiblioteca extends StatefulWidget {
-
   final String nomeBixo;
 
   SuaBiblioteca({this.nomeBixo});
@@ -15,13 +14,12 @@ class SuaBiblioteca extends StatefulWidget {
 }
 
 class _SuaBibliotecaState extends State<SuaBiblioteca> {
-  
   TextEditingController _livroInputController = TextEditingController();
- 
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: MyColors.corBasica,
       appBar: AppBar(
         titleSpacing: 0,
         flexibleSpace: Container(
@@ -34,23 +32,25 @@ class _SuaBibliotecaState extends State<SuaBiblioteca> {
           ),
         ),
         leading: Container(),
-        title: new Text("@" + widget.nomeBixo,
+        title: new Text(
+          "@" + widget.nomeBixo,
           style: TextStyle(
             color: Colors.black,
             fontSize: 30,
-            fontFamily: "CaviarDreams",  
+            fontFamily: "CaviarDreams",
           ),
         ),
         backgroundColor: MyColors.corSecundaria,
       ),
       body: SafeArea(
-        child:SingleChildScrollView(
+        child: SingleChildScrollView(
           child: Column(
             children: [
               titulo("Monte a sua biblioteca!"),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Text("- Disponibilize algum de seus livros!\n\n- Vamos alimentar a nossa comunidade!\n\n A comunidade iteana agradece!",
+                child: Text(
+                  "- Disponibilize algum de seus livros!\n\n- Vamos alimentar a nossa comunidade!\n\n A comunidade iteana agradece!",
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 18,
@@ -83,11 +83,12 @@ class _SuaBibliotecaState extends State<SuaBiblioteca> {
               SizedBox(height: 50),
               GestureDetector(
                 onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (BuildContext context) => ContinuarBiblioteca()
-                      ));
-                    },
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          ContinuarBiblioteca()));
+                },
                 child: Container(
+                  width: 150,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [MyColors.corPrincipal, MyColors.corSecundaria],
@@ -98,51 +99,46 @@ class _SuaBibliotecaState extends State<SuaBiblioteca> {
                   ),
                   margin: EdgeInsets.symmetric(horizontal: 10),
                   padding: EdgeInsets.all(10),
-                  child: Row(
-                    children:[ 
-                      Icon(Icons.add),
-                      SizedBox(width: 80),
-                      Text("Adicionar",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 29,
-                          fontFamily: "DancingScript",
-                        ),
+                  child: Row(children: [
+                    Icon(Icons.add),
+                    Text(
+                      "Adicionar",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 29,
+                        fontFamily: "DancingScript",
                       ),
-                    ]
-                  ),
+                    ),
+                  ]),
                 ),
               ),
               SizedBox(height: 20),
               GestureDetector(
                 onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (BuildContext context) => PaginaPrincipal()
-                      ));
-                    },
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) => PaginaPrincipal()));
+                },
                 child: Container(
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-              colors: [MyColors.corPrincipal, MyColors.corSecundaria],
-              begin: Alignment.bottomRight,
-              end: Alignment.topLeft,
-            ),
+                    color: MyColors.corBasica,
                     borderRadius: BorderRadius.circular(50),
                   ),
                   margin: EdgeInsets.symmetric(horizontal: 10),
                   padding: EdgeInsets.all(10),
                   child: Row(
-                    children:[ 
-                      SizedBox(width: 20),
-                      Text("Não tenho nenhum livro :(",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 29,
-                          fontFamily: "DancingScript",
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Não tenho nenhum livro :(",
+                          style: TextStyle(
+                            decoration: TextDecoration.underline,
+                            color: MyColors.corPrincipal,
+                            fontSize: 25,
+                            fontFamily: "DancingScript",
+                          ),
                         ),
-                      ),
-                    ]
-                  ),
+                      ]),
                 ),
               ),
             ],
@@ -153,14 +149,15 @@ class _SuaBibliotecaState extends State<SuaBiblioteca> {
   }
 }
 
-Widget titulo (String texto){
+Widget titulo(String texto) {
   return Container(
     child: Column(
       children: [
         SizedBox(height: 10),
         Container(
           padding: EdgeInsets.all(10),
-          child: Text(texto,
+          child: Text(
+            texto,
             style: TextStyle(
               color: MyColors.corPrincipal,
               fontSize: 41,
@@ -174,7 +171,7 @@ Widget titulo (String texto){
   );
 }
 
-Widget botao (String texto){
+Widget botao(String texto) {
   return Container(
     decoration: BoxDecoration(
       color: MyColors.corSecundaria,
@@ -182,18 +179,17 @@ Widget botao (String texto){
     ),
     margin: EdgeInsets.symmetric(horizontal: 10),
     padding: EdgeInsets.all(10),
-      child: Row(
-        children:[ 
-            Icon(Icons.add),
-            SizedBox(width: 80),
-            Text(texto,
-              style: TextStyle(
-                color: MyColors.corPrincipal,
-                fontSize: 29,
-                fontFamily: "DancingScript",
-            ),
+    child: Row(children: [
+      Icon(Icons.add),
+      SizedBox(width: 80),
+      Text(
+        texto,
+        style: TextStyle(
+          color: MyColors.corPrincipal,
+          fontSize: 29,
+          fontFamily: "DancingScript",
         ),
-        ]
       ),
+    ]),
   );
 }

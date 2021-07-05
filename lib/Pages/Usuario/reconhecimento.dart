@@ -4,7 +4,6 @@ import 'package:h_book/Pages/Usuario/novo_usuario.dart';
 import '../../config/my_colors.dart';
 
 class Reconhecimento extends StatefulWidget {
-
   @override
   _ReconhecimentoState createState() => _ReconhecimentoState();
 }
@@ -23,14 +22,16 @@ class _ReconhecimentoState extends State<Reconhecimento> {
                 padding: EdgeInsets.symmetric(horizontal: 10),
                 child: Column(
                   children: [
-                    Text("Diz aí, iteano!",
+                    Text(
+                      "Diz aí, iteano!",
                       style: TextStyle(
                         color: MyColors.corPrincipal,
                         fontSize: 45,
                         fontFamily: "DancingScript",
                       ),
                     ),
-                    Text("A gente já se conhece?",
+                    Text(
+                      "A gente já se conhece?",
                       style: TextStyle(
                         color: MyColors.corPrincipal,
                         fontSize: 43,
@@ -42,22 +43,20 @@ class _ReconhecimentoState extends State<Reconhecimento> {
               ),
               SizedBox(height: 200),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (BuildContext context) => NovoUsuario()
-                      ));
-                    },
-                    child: botao("Novo usuário")
-                  ),
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (BuildContext context) => NovoUsuario()));
+                      },
+                      child: botao("Novo usuário")),
                   GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (BuildContext context) => JaTenhoConta()
-                      ));
-                    },
-                    child: botao("Já tenho conta")),
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (BuildContext context) => JaTenhoConta()));
+                      },
+                      child: botao("Já tenho conta")),
                 ],
               )
             ],
@@ -68,7 +67,7 @@ class _ReconhecimentoState extends State<Reconhecimento> {
   }
 }
 
-Widget botao (String texto){
+Widget botao(String texto) {
   return Container(
     decoration: BoxDecoration(
       gradient: LinearGradient(
@@ -81,7 +80,8 @@ Widget botao (String texto){
     margin: EdgeInsets.only(left: 10),
     padding: EdgeInsets.all(10),
     child: Center(
-      child: Text(texto,
+      child: Text(
+        texto,
         style: TextStyle(
           color: Colors.black,
           fontSize: 29,

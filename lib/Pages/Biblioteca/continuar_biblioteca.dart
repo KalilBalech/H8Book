@@ -3,18 +3,17 @@ import '../../config/my_colors.dart';
 import 'package:h_book/Pages/PaginaPrincipal/pagina_principal.dart';
 
 class ContinuarBiblioteca extends StatefulWidget {
-
   @override
   _ContinuarBibliotecaState createState() => _ContinuarBibliotecaState();
 }
 
 class _ContinuarBibliotecaState extends State<ContinuarBiblioteca> {
-
   TextEditingController _livroInputController = TextEditingController();
 
-   @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: MyColors.corBasica,
       appBar: AppBar(
         flexibleSpace: Container(
           decoration: BoxDecoration(
@@ -22,22 +21,23 @@ class _ContinuarBibliotecaState extends State<ContinuarBiblioteca> {
               colors: [MyColors.corPrincipal, MyColors.corSecundaria],
               begin: Alignment.bottomRight,
               end: Alignment.topLeft,
-            ) 
+            ),
           ),
         ),
         leading: Container(),
         titleSpacing: 0,
-        title: new Text("@usuário",
+        title: new Text(
+          "@usuário",
           style: TextStyle(
             color: Colors.black,
             fontSize: 40,
-            fontFamily: "DancingScript",  
+            fontFamily: "DancingScript",
           ),
         ),
         backgroundColor: MyColors.corSecundaria,
       ),
       body: SafeArea(
-        child:SingleChildScrollView(
+        child: SingleChildScrollView(
           child: Column(
             children: [
               Container(
@@ -46,11 +46,10 @@ class _ContinuarBibliotecaState extends State<ContinuarBiblioteca> {
                     SizedBox(height: 30),
                     Container(
                       margin: EdgeInsets.symmetric(horizontal: 10),
-                      decoration: BoxDecoration(
-                        color: MyColors.corBasica
-                      ),
+                      decoration: BoxDecoration(color: MyColors.corBasica),
                       //padding: EdgeInsets.all(10),
-                      child: Text("Obrigado pela contribuição!",
+                      child: Text(
+                        "Obrigado pela contribuição!",
                         style: TextStyle(
                           color: MyColors.corPrincipal,
                           fontSize: 33,
@@ -68,7 +67,8 @@ class _ContinuarBibliotecaState extends State<ContinuarBiblioteca> {
                     //SizedBox(height: 10),
                     Container(
                       padding: EdgeInsets.all(10),
-                      child: Text("Adicione mais algum livro",
+                      child: Text(
+                        "Adicione mais algum livro",
                         style: TextStyle(
                           color: MyColors.corPrincipal,
                           fontSize: 35,
@@ -82,7 +82,8 @@ class _ContinuarBibliotecaState extends State<ContinuarBiblioteca> {
               ),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Text("- A comunidade iteana agradece! :)",
+                child: Text(
+                  "- A comunidade iteana agradece! :)",
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 25,
@@ -115,11 +116,12 @@ class _ContinuarBibliotecaState extends State<ContinuarBiblioteca> {
               SizedBox(height: 50),
               GestureDetector(
                 onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (BuildContext context) => ContinuarBiblioteca()
-                      ));
-                    },
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          ContinuarBiblioteca()));
+                },
                 child: Container(
+                  width: 150,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [MyColors.corPrincipal, MyColors.corSecundaria],
@@ -131,50 +133,48 @@ class _ContinuarBibliotecaState extends State<ContinuarBiblioteca> {
                   margin: EdgeInsets.symmetric(horizontal: 10),
                   padding: EdgeInsets.all(10),
                   child: Row(
-                    children:[ 
-                      Icon(Icons.add),
-                      SizedBox(width: 80),
-                      Text("Adicionar",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 29,
-                          fontFamily: "DancingScript",
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(Icons.add),
+                        Text(
+                          "Adicionar",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 29,
+                            fontFamily: "DancingScript",
+                          ),
                         ),
-                      ),
-                    ]
-                  ),
+                      ]),
                 ),
               ),
               SizedBox(height: 20),
               GestureDetector(
                 onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (BuildContext context) => PaginaPrincipal()
-                      ));
-                    },
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) => PaginaPrincipal()));
+                },
                 child: Container(
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-              colors: [MyColors.corPrincipal, MyColors.corSecundaria],
-              begin: Alignment.bottomRight,
-              end: Alignment.topLeft,
-            ),
+                    color: MyColors.corBasica,
                     borderRadius: BorderRadius.circular(50),
                   ),
                   margin: EdgeInsets.symmetric(horizontal: 10),
                   padding: EdgeInsets.all(10),
                   child: Row(
-                    children:[ 
-                      SizedBox(width: 20),
-                      Text("Não tenho mais nenhum :(",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 29,
-                          fontFamily: "DancingScript",
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Não tenho mais nenhum livro :(",
+                          style: TextStyle(
+                            decoration: TextDecoration.underline,
+                            color: MyColors.corPrincipal,
+                            fontSize: 25,
+                            fontFamily: "DancingScript",
+                          ),
                         ),
-                      ),
-                    ]
-                  ),
+                      ]),
                 ),
               ),
             ],
@@ -185,14 +185,15 @@ class _ContinuarBibliotecaState extends State<ContinuarBiblioteca> {
   }
 }
 
-Widget titulo (String texto){
+Widget titulo(String texto) {
   return Container(
     child: Column(
       children: [
         SizedBox(height: 10),
         Container(
           padding: EdgeInsets.all(10),
-          child: Text(texto,
+          child: Text(
+            texto,
             style: TextStyle(
               color: MyColors.corPrincipal,
               fontSize: 41,
@@ -206,7 +207,7 @@ Widget titulo (String texto){
   );
 }
 
-Widget botao (String texto){
+Widget botao(String texto) {
   return Container(
     decoration: BoxDecoration(
       color: MyColors.corSecundaria,
@@ -214,18 +215,17 @@ Widget botao (String texto){
     ),
     margin: EdgeInsets.symmetric(horizontal: 10),
     padding: EdgeInsets.all(10),
-      child: Row(
-        children:[ 
-            Icon(Icons.add),
-            SizedBox(width: 80),
-            Text(texto,
-              style: TextStyle(
-                color: MyColors.corPrincipal,
-                fontSize: 29,
-                fontFamily: "DancingScript",
-            ),
+    child: Row(children: [
+      Icon(Icons.add),
+      SizedBox(width: 80),
+      Text(
+        texto,
+        style: TextStyle(
+          color: MyColors.corPrincipal,
+          fontSize: 29,
+          fontFamily: "DancingScript",
         ),
-        ]
       ),
+    ]),
   );
 }

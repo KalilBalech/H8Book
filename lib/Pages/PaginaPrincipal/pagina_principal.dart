@@ -4,24 +4,21 @@ import 'Home.dart';
 import 'Biblioteca.dart';
 
 class PaginaPrincipal extends StatefulWidget {
-
   @override
   _PaginaPrincipalState createState() => _PaginaPrincipalState();
 }
 
 class _PaginaPrincipalState extends State<PaginaPrincipal> {
-
-  
   //TextEditingController _nomeDeBixoInputController = TextEditingController();
   //TextEditingController _livroInputController = TextEditingController();
 
   int _selectedIndex = 0;
-  List<Widget>_widgetOptions = <Widget>[
+  /*List<Widget>_widgetOptions = <Widget>[
     Home(),
     Biblioteca(),
-  ];
+  ];*/
 
-  void _onItemTap(int index){
+  void _onItemTap(int index) {
     setState(() {
       _selectedIndex = index;
     });
@@ -32,14 +29,15 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
     return Scaffold(
       appBar: AppBar(
         leading: Container(),
-        title: new Text("H8Book",
+        title: new Text(
+          "H8Book",
           style: TextStyle(
             color: Colors.black,
             fontSize: 40,
-            fontFamily: "DancingScript",  
+            fontFamily: "DancingScript",
           ),
         ),
-        titleSpacing: 0,//it is 16 by default
+        titleSpacing: 0, //it is 16 by default
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -57,21 +55,17 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            label:  "Home",
+            label: "Home",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.library_books_outlined),
-            label:  "Biblioteca",
+            label: "Biblioteca",
           ),
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTap,
       ),
       backgroundColor: MyColors.corBasica,
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
-      ),
     );
   }
 }
-

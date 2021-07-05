@@ -17,6 +17,7 @@ class _NovoUsuarioState extends State<NovoUsuario> {
   final _apartamentoKey = GlobalKey<FormState>();
   final _blocoKey = GlobalKey<FormState>();
   final _vagaKey = GlobalKey<FormState>();
+  final _emailKey = GlobalKey<FormState>();
 
   TextEditingController _nomeDeBixo = TextEditingController();
   TextEditingController _senha = TextEditingController();
@@ -24,6 +25,7 @@ class _NovoUsuarioState extends State<NovoUsuario> {
   TextEditingController _apartamento = TextEditingController();
   TextEditingController _bloco = TextEditingController();
   TextEditingController _vaga = TextEditingController();
+  TextEditingController _email = TextEditingController();
 
   String nomeBixo;
 
@@ -193,7 +195,7 @@ class _NovoUsuarioState extends State<NovoUsuario> {
                     child: TextFormField(
                       validator: (valor) {
                         if (valor.isEmpty) {
-                          return 'Deixar a caixa de texto em branco é falta de DC...';
+                          return 'Caixa de texto em branco é falta de DC';
                         }
                         if (valor != "A" &&
                             valor != "B" &&
@@ -322,6 +324,36 @@ class _NovoUsuarioState extends State<NovoUsuario> {
                     ),
                   ),
                 ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding: EdgeInsets.symmetric(horizontal: 5),
+                  child: Form(
+                    key: _emailKey,
+                    child: TextFormField(
+                      validator: (valor) {
+                        if (valor.isEmpty) {
+                          return 'Escreva seu email. Aqui não aceitamos o @ga ';
+                        }
+                        return null;
+                      },
+                      controller: _email,
+                      decoration: InputDecoration(
+                        labelText: "Email",
+                        labelStyle: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 29,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: "DancingScript",
+                        ),
+                        icon: Icon(Icons.email_outlined),
+                      ),
+                    ),
+                  ),
+                ),
                 SizedBox(height: 30),
                 GestureDetector(
                     onTap: () {
@@ -330,7 +362,8 @@ class _NovoUsuarioState extends State<NovoUsuario> {
                           _confirmarSenhaKey.currentState.validate() &&
                           _blocoKey.currentState.validate() &&
                           _apartamentoKey.currentState.validate() &&
-                          _vagaKey.currentState.validate()) {
+                          _vagaKey.currentState.validate() &&
+                          _emailKey.currentState.validate()) {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (BuildContext context) => SuaBiblioteca(
                                   nomeBixo: _nomeDeBixo.text,
