@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:h_book/Pages/Biblioteca/sua_biblioteca.dart';
 import '../../config/my_colors.dart';
@@ -12,6 +13,7 @@ class _NovoUsuarioState extends State<NovoUsuario> {
   bool _secureText = true;
 
   final _nomeDeBixoKey = GlobalKey<FormState>();
+  final _turmaKey = GlobalKey<FormState>();
   final _senhaKey = GlobalKey<FormState>();
   final _confirmarSenhaKey = GlobalKey<FormState>();
   final _apartamentoKey = GlobalKey<FormState>();
@@ -20,6 +22,7 @@ class _NovoUsuarioState extends State<NovoUsuario> {
   final _emailKey = GlobalKey<FormState>();
 
   TextEditingController _nomeDeBixo = TextEditingController();
+  TextEditingController _turma = TextEditingController();
   TextEditingController _senha = TextEditingController();
   TextEditingController _confirmarSenha = TextEditingController();
   TextEditingController _apartamento = TextEditingController();
@@ -69,12 +72,11 @@ class _NovoUsuarioState extends State<NovoUsuario> {
                     child: TextFormField(
                       validator: (valor) {
                         if (valor.isEmpty) {
-                          return 'Escreve o nome aqui, bixo';
+                          return 'Escreva o seu nome aqui';
                         }
                         return null;
                       },
                       controller: _nomeDeBixo,
-                      //inputFormatters: [UpperCaseText()],
                       decoration: InputDecoration(
                         labelText: "Nome de bixo",
                         labelStyle: TextStyle(
@@ -83,14 +85,39 @@ class _NovoUsuarioState extends State<NovoUsuario> {
                           fontWeight: FontWeight.w400,
                           fontFamily: "DancingScript",
                         ),
-                        /*hintText: "Nome de bixo",
-                        hintStyle: TextStyle(
+                        icon: Icon(Icons.person),
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding: EdgeInsets.symmetric(horizontal: 5),
+                  child: Form(
+                    key: _turmaKey,
+                    child: TextFormField(
+                      validator: (valor) {
+                        if (valor.isEmpty) {
+                          return 'Escreva a sua turma aqui';
+                        }
+                        return null;
+                      },
+                      controller: _turma,
+                      keyboardType: TextInputType.number,
+                      maxLength: 2,
+                      decoration: InputDecoration(
+                        labelText: "Turma (Ex: 25)",
+                        labelStyle: TextStyle(
                           color: Colors.grey,
                           fontSize: 29,
                           fontWeight: FontWeight.w400,
                           fontFamily: "DancingScript",
-                        ),*/
-                        icon: Icon(Icons.person),
+                        ),
+                        icon: Icon(Icons.group_rounded),
                       ),
                     ),
                   ),
@@ -107,10 +134,10 @@ class _NovoUsuarioState extends State<NovoUsuario> {
                     child: TextFormField(
                       validator: (valor) {
                         if (valor.isEmpty) {
-                          return 'Cria uma senha aqui, bixo';
+                          return 'Cria uma senha aqui';
                         }
                         if (_senha.text.length < 8) {
-                          return "A senha deve ter, pelo menos, 8 dígitos";
+                          return "A senha deve ter pelo menos 8 dígitos";
                         }
                         return null;
                       },
@@ -151,7 +178,7 @@ class _NovoUsuarioState extends State<NovoUsuario> {
                     child: TextFormField(
                       validator: (valor) {
                         if (valor.isEmpty) {
-                          return 'Repete a senha IGUALZINHA aqui, bixo';
+                          return 'Repita a sua senha aqui';
                         }
                         if (_senha.text != _confirmarSenha.text) {
                           return "Confirmação de senha inválida";
@@ -195,7 +222,7 @@ class _NovoUsuarioState extends State<NovoUsuario> {
                     child: TextFormField(
                       validator: (valor) {
                         if (valor.isEmpty) {
-                          return 'Caixa de texto em branco é falta de DC';
+                          return 'Esceva seu bloco aqui';
                         }
                         if (valor != "A" &&
                             valor != "B" &&
@@ -239,31 +266,31 @@ class _NovoUsuarioState extends State<NovoUsuario> {
                         if (_bloco.text == "A" &&
                             (int.parse(valor) >= 143 ||
                                 int.parse(valor) <= 100)) {
-                          return "Digite um número de apartamento válido";
+                          return "Número de apartamento inválido";
                         }
                         if (_bloco.text == "B" &&
                             (int.parse(valor) >= 242 ||
                                 int.parse(valor) <= 200)) {
-                          return "Digite um número de apartamento válido";
+                          return "Número de apartamento inválido";
                         }
                         if (_bloco.text == "C" &&
                             (int.parse(valor) >= 331 ||
                                 int.parse(valor) <= 300)) {
-                          return "Digite um número de apartamento válido";
+                          return "Número de apartamento inválido";
                         }
                         if (_bloco.text == "D" &&
                             (int.parse(valor) >= 209 ||
                                 (int.parse(valor) <= 200 &&
                                     int.parse(valor) >= 109) ||
                                 int.parse(valor) <= 100)) {
-                          return "Digite um número de apartamento válido";
+                          return "Número de apartamento inválido";
                         }
                         if (_bloco.text == "E" &&
                             (int.parse(valor) >= 209 ||
                                 (int.parse(valor) <= 200 &&
                                     int.parse(valor) >= 109) ||
                                 int.parse(valor) <= 100)) {
-                          return "Digite um número de apartamento válido";
+                          return "Número de apartamento inválido";
                         }
                         return null;
                       },
@@ -296,7 +323,7 @@ class _NovoUsuarioState extends State<NovoUsuario> {
                     child: TextFormField(
                       validator: (valor) {
                         if (valor.isEmpty) {
-                          return 'Escreve sua vaga aqui, meu consagrado ';
+                          return 'Escreve a sua vaga aqui';
                         }
                         if (valor != "A" &&
                             valor != "B" &&
@@ -304,7 +331,7 @@ class _NovoUsuarioState extends State<NovoUsuario> {
                             valor != "D" &&
                             valor != "E" &&
                             valor != "F") {
-                          return "Escreva uma letra de vaga válida";
+                          return "Vaga inválida";
                         }
                         return null;
                       },
@@ -333,41 +360,50 @@ class _NovoUsuarioState extends State<NovoUsuario> {
                   padding: EdgeInsets.symmetric(horizontal: 5),
                   child: Form(
                     key: _emailKey,
-                    child: TextFormField(
-                      validator: (valor) {
-                        if (valor.isEmpty) {
-                          return 'Escreva seu email. Aqui não aceitamos o @ga ';
-                        }
-                        return null;
-                      },
-                      controller: _email,
-                      decoration: InputDecoration(
-                        labelText: "Email",
-                        labelStyle: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 29,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: "DancingScript",
+                      child: TextFormField(
+                        validator: (valor) {
+                          if (valor.isEmpty) {
+                            return 'Escreva seu email';
+                          }
+                          if(!valor.contains("@")){
+                            return 'Email inválido';
+                          }
+                          return null;
+                        },
+                        keyboardType: TextInputType.emailAddress,
+                        autofillHints: [AutofillHints.email],
+                        controller: _email,
+                        decoration: InputDecoration(
+                          labelText: "Email",
+                          labelStyle: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 29,
+                            fontWeight: FontWeight.w400,
+                            fontFamily: "DancingScript",
+                          ),
+                          icon: Icon(Icons.email_outlined),
                         ),
-                        icon: Icon(Icons.email_outlined),
                       ),
-                    ),
                   ),
                 ),
                 SizedBox(height: 30),
                 GestureDetector(
                     onTap: () {
                       if (_nomeDeBixoKey.currentState.validate() &&
+                          _turmaKey.currentState.validate() &&
                           _senhaKey.currentState.validate() &&
                           _confirmarSenhaKey.currentState.validate() &&
                           _blocoKey.currentState.validate() &&
                           _apartamentoKey.currentState.validate() &&
                           _vagaKey.currentState.validate() &&
                           _emailKey.currentState.validate()) {
+                        registrarUsuario( _nomeDeBixo.text, int.parse(_turma.text) , _senha.text, _bloco.text, int.parse(_apartamento.text), _vaga.text, _email.text);
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (BuildContext context) => SuaBiblioteca(
                                   nomeBixo: _nomeDeBixo.text,
-                                )));
+                                  turma: _turma.text,
+                                )
+                        ));
                       }
                     },
                     child: botao("Avançar ->")),
@@ -449,4 +485,19 @@ Widget botao(String texto) {
       ),
     ),
   );
+}
+
+void registrarUsuario(String nomedebixo, int turma, String senha, String bloco, int apartamento, String vaga, String email ){
+
+  var informacoesUsuario = {
+    "NomeDeBixo": nomedebixo,
+    "Turma": turma,
+    "Senha": senha,
+    "Bloco": bloco,
+    "Apartamento": apartamento,
+    "Vaga": vaga
+  };
+
+  FirebaseFirestore.instance.collection("Usuários").doc(nomedebixo).set(informacoesUsuario);
+
 }

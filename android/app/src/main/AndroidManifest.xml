@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.h_book">
+    package="kalil.myapp.H8Book">
    <application
-        android:label="h_book"
+        android:label="H8Book"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

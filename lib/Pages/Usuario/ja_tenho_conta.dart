@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:h_book/Pages/PaginaPrincipal/pagina_principal.dart';
 import '../../config/my_colors.dart';
 import '../../config/Text_format.dart';
+import 'recuperar_senha.dart';
 
 class JaTenhoConta extends StatefulWidget {
 
@@ -16,6 +17,7 @@ TextEditingController _nomeDeBixoInputController = TextEditingController();
 TextEditingController _senhaInputController = TextEditingController();
 
 bool _secureText = true;
+bool continuarConectado = false;
 
 String _senhaIncompativel;
 
@@ -35,8 +37,9 @@ String _senhaIncompativel;
         title: Text("Já tenho conta",
           style: TextStyle(
             color: Colors.black,
-            fontSize: 40,
-            fontFamily: "DancingScript",
+            fontSize: 25,
+            fontFamily: "CaviarDreams",
+            fontWeight: FontWeight.bold,
           ),
         ),
       ),
@@ -48,7 +51,7 @@ String _senhaIncompativel;
               children: [
                 SizedBox(height: 20),
                 titulo("Alto lá. Identifique-se!"),
-                SizedBox(height: 100),
+                SizedBox(height: 50),
                 Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -76,7 +79,7 @@ String _senhaIncompativel;
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  margin: EdgeInsets.only(right: 20, left: 20, top: 10, bottom: 5),
                   padding: EdgeInsets.symmetric(horizontal: 5),
                   child: Form(
                     child: TextField(
@@ -105,7 +108,55 @@ String _senhaIncompativel;
                     ),
                   ),
                 ),
-                SizedBox(height: 160),
+                Container(
+                  margin: EdgeInsets.only(right: 25),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end ,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (BuildContext context) => RecuperarSenha()
+                          ));
+                        },
+                        child: Text("Esqueceu a senha?",
+                          style: TextStyle(
+                            decoration: TextDecoration.underline,
+                            color: Colors.black,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w400,
+                            fontFamily: "DancingScript", 
+                          ),
+                        ),
+                      ),
+                    ]
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  child: Row(
+                    children: [
+                      Checkbox(
+                        value: continuarConectado, 
+                        onChanged: (bool novoValor){
+                          setState(() {
+                            continuarConectado = novoValor;      
+                          });
+                        },
+                        activeColor: MyColors.corSecundaria,
+                      ),
+                      Text("Continuar Conectado?",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 25,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: "DancingScript",
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(height: 80),
                 GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(

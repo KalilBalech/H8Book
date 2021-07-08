@@ -6,8 +6,9 @@ import '../Biblioteca/continuar_biblioteca.dart';
 
 class SuaBiblioteca extends StatefulWidget {
   final String nomeBixo;
+  final String turma;
 
-  SuaBiblioteca({this.nomeBixo});
+  SuaBiblioteca({this.nomeBixo, this.turma});
 
   @override
   _SuaBibliotecaState createState() => _SuaBibliotecaState();
@@ -33,7 +34,7 @@ class _SuaBibliotecaState extends State<SuaBiblioteca> {
         ),
         leading: Container(),
         title: new Text(
-          "@" + widget.nomeBixo,
+          widget.nomeBixo + widget.turma,
           style: TextStyle(
             color: Colors.black,
             fontSize: 30,
@@ -50,7 +51,7 @@ class _SuaBibliotecaState extends State<SuaBiblioteca> {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 10),
                 child: Text(
-                  "- Disponibilize algum de seus livros!\n\n- Vamos alimentar a nossa comunidade!\n\n A comunidade iteana agradece!",
+                  "- Disponibilize alguns de seus livros!\n\n- Vamos alimentar a nossa comunidade!\n\n A comunidade iteana agradece!",
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 18,
