@@ -17,9 +17,8 @@ class MyApp extends StatelessWidget{
       title: "H8Book",
       theme: ThemeData(
         
-        primarySwatch: Colors.yellow,
+        primarySwatch: Colors.lightBlue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
-        //fontFamily: "DancingScript",
       ),
       home: WelcomePage()
     );

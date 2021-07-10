@@ -41,22 +41,30 @@ class _ReconhecimentoState extends State<Reconhecimento> {
                   ],
                 ),
               ),
-              SizedBox(height: 200),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              SizedBox(height: 170),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   GestureDetector(
                       onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (BuildContext context) => NovoUsuario()));
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) =>  NovoUsuario()
+                        ));
                       },
-                      child: botao("Novo usuário")),
+                      child: botao("Novo usuário")
+                    ),
+                  SizedBox(height: 30),
                   GestureDetector(
                       onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (BuildContext context) => JaTenhoConta()));
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context)  => JaTenhoConta()
+                        ));
                       },
-                      child: botao("Já tenho conta")),
+                      child: botao("Já tenho conta")
+                  ),
+                  //Image.asset('assets/images/harry_potter.png'),
                 ],
               )
             ],
@@ -69,6 +77,7 @@ class _ReconhecimentoState extends State<Reconhecimento> {
 
 Widget botao(String texto) {
   return Container(
+    width: 230,
     decoration: BoxDecoration(
       gradient: LinearGradient(
         colors: [MyColors.corPrincipal, MyColors.corSecundaria],
@@ -84,8 +93,8 @@ Widget botao(String texto) {
         texto,
         style: TextStyle(
           color: Colors.black,
-          fontSize: 29,
-          fontFamily: "DancingScript",
+          fontSize: 25,
+          fontFamily: "CaviarDreams",
         ),
       ),
     ),

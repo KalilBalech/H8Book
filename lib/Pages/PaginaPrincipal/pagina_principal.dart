@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../config/my_colors.dart';
 import 'Home.dart';
-import 'Biblioteca.dart';
+import 'Perfil.dart';
 
 class PaginaPrincipal extends StatefulWidget {
   @override
@@ -9,14 +9,8 @@ class PaginaPrincipal extends StatefulWidget {
 }
 
 class _PaginaPrincipalState extends State<PaginaPrincipal> {
-  //TextEditingController _nomeDeBixoInputController = TextEditingController();
-  //TextEditingController _livroInputController = TextEditingController();
 
   int _selectedIndex = 0;
-  /*List<Widget>_widgetOptions = <Widget>[
-    Home(),
-    Biblioteca(),
-  ];*/
 
   void _onItemTap(int index) {
     setState(() {
@@ -58,8 +52,8 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
             label: "Home",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.library_books_outlined),
-            label: "Biblioteca",
+            icon: Icon(Icons.person_outline_rounded),
+            label: "Perfil",
           ),
         ],
         currentIndex: _selectedIndex,

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import '../../config/my_colors.dart';
 
-class Biblioteca extends StatefulWidget {
+class Perifl extends StatefulWidget {
 
   @override
-  _BibliotecaState createState() => _BibliotecaState();
+  _PeriflState createState() => _PeriflState();
 }
 
-class _BibliotecaState extends State<Biblioteca> {
+class _PeriflState extends State<Perifl> {
 
   TextEditingController _livroInputController = TextEditingController();
 
@@ -19,7 +19,7 @@ class _BibliotecaState extends State<Biblioteca> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              titulo("Sua biblioteca"),
+              titulo("Sua Perifl"),
               Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -45,7 +45,7 @@ class _BibliotecaState extends State<Biblioteca> {
               GestureDetector(
                 onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                        builder: (BuildContext context) => Biblioteca()
+                        builder: (BuildContext context) => Perifl()
                       ));
                     },
                 child: Container(
@@ -63,7 +63,7 @@ class _BibliotecaState extends State<Biblioteca> {
                     children:[ 
                       Icon(Icons.add),
                       SizedBox(width: 10),
-                      Text("Adicionar a sua biblioteca",
+                      Text("Adicionar a sua Perifl",
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 29,

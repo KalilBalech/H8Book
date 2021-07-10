@@ -1,8 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:h_book/Pages/PaginaPrincipal/pagina_principal.dart';
 import '../../config/my_colors.dart';
-import '../Biblioteca/continuar_biblioteca.dart';
 
 class SuaBiblioteca extends StatefulWidget {
   final String nomeBixo;
@@ -15,7 +15,15 @@ class SuaBiblioteca extends StatefulWidget {
 }
 
 class _SuaBibliotecaState extends State<SuaBiblioteca> {
-  TextEditingController _livroInputController = TextEditingController();
+
+  TextEditingController _livro = TextEditingController();
+  Stream livros;
+
+  @override
+  void initState(){
+    livros = FirebaseFirestore.instance.collection("Usuários").doc(widget.nomeBixo+widget.turma).collection("Biblioteca").snapshots();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +50,17 @@ class _SuaBibliotecaState extends State<SuaBiblioteca> {
           ),
         ),
         backgroundColor: MyColors.corSecundaria,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.navigate_next_rounded),
+            iconSize: 25, 
+            onPressed: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) =>  PaginaPrincipal()));
+            }
+          ),
+        ],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -51,7 +70,7 @@ class _SuaBibliotecaState extends State<SuaBiblioteca> {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 10),
                 child: Text(
-                  "- Disponibilize alguns de seus livros!\n\n- Vamos alimentar a nossa comunidade!\n\n A comunidade iteana agradece!",
+                  "- Disponibilize alguns de seus livros!",
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 18,
@@ -68,7 +87,7 @@ class _SuaBibliotecaState extends State<SuaBiblioteca> {
                 margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 padding: EdgeInsets.symmetric(horizontal: 5),
                 child: TextField(
-                  controller: _livroInputController,
+                  controller: _livro,
                   decoration: InputDecoration(
                     hintText: "Título do livro",
                     hintStyle: TextStyle(
@@ -78,76 +97,87 @@ class _SuaBibliotecaState extends State<SuaBiblioteca> {
                       fontFamily: "DancingScript",
                     ),
                     icon: Icon(Icons.local_library),
-                  ),
-                ),
-              ),
-              SizedBox(height: 50),
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          ContinuarBiblioteca()));
-                },
-                child: Container(
-                  width: 150,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [MyColors.corPrincipal, MyColors.corSecundaria],
-                      begin: Alignment.bottomRight,
-                      end: Alignment.topLeft,
-                    ),
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                  margin: EdgeInsets.symmetric(horizontal: 10),
-                  padding: EdgeInsets.all(10),
-                  child: Row(children: [
-                    Icon(Icons.add),
-                    Text(
-                      "Adicionar",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 29,
-                        fontFamily: "DancingScript",
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        Icons.add,
+                        color: MyColors.corPrincipal,
                       ),
-                    ),
-                  ]),
-                ),
-              ),
-              SizedBox(height: 20),
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) => PaginaPrincipal()));
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: MyColors.corBasica,
-                    borderRadius: BorderRadius.circular(50),
+                      onPressed: () {
+                        if(_livro.text.isNotEmpty){
+                          FirebaseFirestore.instance.collection("Usuários").doc(widget.nomeBixo+widget.turma).collection("Biblioteca").doc(_livro.text).set({'nomeDoLivro' : _livro.text});
+                          _livro.text = "";
+                        }
+                      }
+                    )
                   ),
-                  margin: EdgeInsets.symmetric(horizontal: 10),
-                  padding: EdgeInsets.all(10),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Não tenho nenhum livro :(",
-                          style: TextStyle(
-                            decoration: TextDecoration.underline,
-                            color: MyColors.corPrincipal,
-                            fontSize: 25,
-                            fontFamily: "DancingScript",
-                          ),
-                        ),
-                      ]),
                 ),
               ),
+              SizedBox(height: 30),
+               todosLivros()
             ],
           ),
         ),
       ),
     );
   }
+
+  Widget livro(String nomedolivro){
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        //borderRadius: BorderRadius.circular(20),
+      ),
+      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: 5),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Icon(
+            Icons.menu_book_rounded,
+            color: MyColors.corPrincipal,
+          ),
+          SizedBox(width: 7),
+          Expanded(
+            child: Text(
+              nomedolivro,
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 18,
+                //fontWeight: FontWeight.w400,
+                fontFamily: "CaviarDreams",
+              ),
+            ),
+          ),
+          IconButton(
+            icon: Icon(Icons.delete_outlined),
+            color: Colors.grey, 
+            onPressed: (){
+              FirebaseFirestore.instance.collection("Usuários").doc(widget.nomeBixo+widget.turma).collection("Biblioteca").doc(nomedolivro).delete();
+            })
+        ],
+      ),
+    );
+  }
+
+  Widget todosLivros(){
+    return StreamBuilder(
+      stream: livros,
+      builder: (context, snapshot){
+        if(snapshot.connectionState == ConnectionState.waiting){
+          return CircularProgressIndicator();
+        }
+        final listaLivros = snapshot.data.docs;
+        return Column(
+          children: [
+            for(int i = 0; i < listaLivros.length; i++)
+              livro(listaLivros[i]["nomeDoLivro"]),
+          ],
+        );
+      }
+    );
+  }
+
+  
 }
 
 Widget titulo(String texto) {
@@ -169,28 +199,5 @@ Widget titulo(String texto) {
         SizedBox(height: 30),
       ],
     ),
-  );
-}
-
-Widget botao(String texto) {
-  return Container(
-    decoration: BoxDecoration(
-      color: MyColors.corSecundaria,
-      borderRadius: BorderRadius.circular(50),
-    ),
-    margin: EdgeInsets.symmetric(horizontal: 10),
-    padding: EdgeInsets.all(10),
-    child: Row(children: [
-      Icon(Icons.add),
-      SizedBox(width: 80),
-      Text(
-        texto,
-        style: TextStyle(
-          color: MyColors.corPrincipal,
-          fontSize: 29,
-          fontFamily: "DancingScript",
-        ),
-      ),
-    ]),
   );
 }

@@ -15,14 +15,16 @@ class WelcomePage extends StatelessWidget {
           color: MyColors.corPrincipal,
         ),
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (BuildContext context) => Reconhecimento()));
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Reconhecimento()));
         },
       ),
       backgroundColor: MyColors.corBasica,
       body: SafeArea(
         child: Center(
-          child: Column(children: [
+          child: Column(
+            children: [
             SizedBox(height: 50),
             Text(
               "H8BooK",
@@ -41,15 +43,6 @@ class WelcomePage extends StatelessWidget {
                 fontFamily: "DancingScript",
               ),
             ),
-            /*SizedBox(height: 250),
-              GestureDetector(
-                onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (BuildContext context) => Reconhecimento()
-                      ));
-                    },
-                child: botao("avançar ->")
-              )*/
           ]),
         ),
       ),

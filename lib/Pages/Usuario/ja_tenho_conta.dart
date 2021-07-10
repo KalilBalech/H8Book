@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:h_book/Pages/PaginaPrincipal/pagina_principal.dart';
 import '../../config/my_colors.dart';
@@ -12,19 +13,36 @@ class JaTenhoConta extends StatefulWidget {
 
 class _JaTenhoContaState extends State<JaTenhoConta> {
 
-  
-TextEditingController _nomeDeBixoInputController = TextEditingController();
-TextEditingController _senhaInputController = TextEditingController();
+  TextEditingController _nomeDeBixoInputController = TextEditingController();
+  TextEditingController _senhaInputController = TextEditingController();
 
-bool _secureText = true;
-bool continuarConectado = false;
+  bool _secureText = true;
+  bool continuarConectado = false;
 
-String _senhaIncompativel;
+  String _senhaIncompativel;
+
+  Stream usuariosCadastrados;
+
+    @override
+  void initState(){
+    usuariosCadastrados = FirebaseFirestore.instance.collection("Usuários").snapshots();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: const Icon(Icons.navigate_before_rounded),
+              onPressed: () { 
+                Navigator.pop(context);
+              },
+            );
+          }
+        ),
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -37,9 +55,9 @@ String _senhaIncompativel;
         title: Text("Já tenho conta",
           style: TextStyle(
             color: Colors.black,
-            fontSize: 25,
+            fontSize: 30,
             fontFamily: "CaviarDreams",
-            fontWeight: FontWeight.bold,
+            //fontWeight: FontWeight.bold,
           ),
         ),
       ),
@@ -51,7 +69,7 @@ String _senhaIncompativel;
               children: [
                 SizedBox(height: 20),
                 titulo("Alto lá. Identifique-se!"),
-                SizedBox(height: 50),
+                SizedBox(height: 35),
                 Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -123,15 +141,16 @@ String _senhaIncompativel;
                           style: TextStyle(
                             decoration: TextDecoration.underline,
                             color: Colors.black,
-                            fontSize: 20,
+                            fontSize: 15,
                             fontWeight: FontWeight.w400,
-                            fontFamily: "DancingScript", 
+                            fontFamily: "CaviarDreams", 
                           ),
                         ),
                       ),
                     ]
                   ),
                 ),
+                SizedBox(height: 10),
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                   child: Row(
@@ -148,9 +167,9 @@ String _senhaIncompativel;
                       Text("Continuar Conectado?",
                         style: TextStyle(
                           color: Colors.black,
-                          fontSize: 25,
+                          fontSize: 19,
                           fontWeight: FontWeight.w400,
-                          fontFamily: "DancingScript",
+                          fontFamily: "CaviarDreams",
                         ),
                       )
                     ],
@@ -159,8 +178,9 @@ String _senhaIncompativel;
                 SizedBox(height: 80),
                 GestureDetector(
                   onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                    builder: (BuildContext context) => PaginaPrincipal()
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) =>  PaginaPrincipal()
                     ));
                   },
                   child: botao("Avançar ->")
@@ -237,8 +257,8 @@ Widget botao (String texto){
       child: Text(texto,
         style: TextStyle(
           color: Colors.black,
-          fontSize: 30,
-          fontFamily: "DancingScript",
+          fontSize: 25,
+          fontFamily: "CaviarDreams",
         ),
       ),
     ),

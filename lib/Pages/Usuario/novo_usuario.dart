@@ -32,10 +32,28 @@ class _NovoUsuarioState extends State<NovoUsuario> {
 
   String nomeBixo;
 
+  Stream usuariosCadastrados;
+
+  @override
+  void initState(){
+    usuariosCadastrados = FirebaseFirestore.instance.collection("Usuários").snapshots();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: const Icon(Icons.navigate_before_rounded),
+              onPressed: () { 
+                Navigator.pop(context);
+              },
+            );
+          }
+        ),
         flexibleSpace: Container(
           decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -47,9 +65,9 @@ class _NovoUsuarioState extends State<NovoUsuario> {
         title: Text(
           "Novo usuário",
           style: TextStyle(
-            fontFamily: "DancingScript",
+            fontFamily: "CaviarDreams",
             color: Colors.black,
-            fontSize: 40,
+            fontSize: 30,
           ),
         ),
       ),
@@ -389,21 +407,13 @@ class _NovoUsuarioState extends State<NovoUsuario> {
                 SizedBox(height: 30),
                 GestureDetector(
                     onTap: () {
-                      if (_nomeDeBixoKey.currentState.validate() &&
-                          _turmaKey.currentState.validate() &&
-                          _senhaKey.currentState.validate() &&
-                          _confirmarSenhaKey.currentState.validate() &&
-                          _blocoKey.currentState.validate() &&
-                          _apartamentoKey.currentState.validate() &&
-                          _vagaKey.currentState.validate() &&
-                          _emailKey.currentState.validate()) {
-                        registrarUsuario( _nomeDeBixo.text, int.parse(_turma.text) , _senha.text, _bloco.text, int.parse(_apartamento.text), _vaga.text, _email.text);
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (BuildContext context) => SuaBiblioteca(
-                                  nomeBixo: _nomeDeBixo.text,
-                                  turma: _turma.text,
-                                )
-                        ));
+                      if (_nomeDeBixoKey.currentState.validate() && _turmaKey.currentState.validate() && _senhaKey.currentState.validate() && _confirmarSenhaKey.currentState.validate() && 
+                      _blocoKey.currentState.validate() && _apartamentoKey.currentState.validate() && _vagaKey.currentState.validate() && _emailKey.currentState.validate()) {
+                          registrarUsuario( _nomeDeBixo.text, _turma.text , _senha.text, _bloco.text, int.parse(_apartamento.text), _vaga.text, _email.text);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) =>  SuaBiblioteca(nomeBixo: _nomeDeBixo.text,turma: _turma.text,)
+                          ));
                       }
                     },
                     child: botao("Avançar ->")),
@@ -415,6 +425,16 @@ class _NovoUsuarioState extends State<NovoUsuario> {
       ),
     );
   }
+
+  /*verificacaoDoUsuario(){
+    FirebaseFirestore.instance.collection("Usuários").snapshots().listen(snapshot){
+      List documents;
+      setState((){
+        documents = snapshot.documents;
+      })
+    }
+  }*/
+
 }
 
 Widget titulo(String texto) {
@@ -479,25 +499,24 @@ Widget botao(String texto) {
         texto,
         style: TextStyle(
           color: Colors.black,
-          fontSize: 30,
-          fontFamily: "DancingScript",
+          fontSize: 25,
+          fontFamily: "CaviarDreams",
         ),
       ),
     ),
   );
 }
 
-void registrarUsuario(String nomedebixo, int turma, String senha, String bloco, int apartamento, String vaga, String email ){
+void registrarUsuario(String nomedebixo, String turma, String senha, String bloco, int apartamento, String vaga, String email ){
 
   var informacoesUsuario = {
-    "NomeDeBixo": nomedebixo,
-    "Turma": turma,
+    "id": nomedebixo + turma,
     "Senha": senha,
     "Bloco": bloco,
     "Apartamento": apartamento,
     "Vaga": vaga
   };
 
-  FirebaseFirestore.instance.collection("Usuários").doc(nomedebixo).set(informacoesUsuario);
+  FirebaseFirestore.instance.collection("Usuários").doc(nomedebixo+turma).set(informacoesUsuario);
 
 }
