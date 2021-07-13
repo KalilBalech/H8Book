@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../config/my_colors.dart';
-import 'Home.dart';
-import 'Perfil.dart';
 
 class PaginaPrincipal extends StatefulWidget {
-
   final String nomeDeBixo;
   final String turma;
 
@@ -15,8 +12,26 @@ class PaginaPrincipal extends StatefulWidget {
 }
 
 class _PaginaPrincipalState extends State<PaginaPrincipal> {
-
   int _selectedIndex = 0;
+
+  final List<Widget> _children = [
+    //primeira opção de página
+    Container(
+        child: FittedBox(
+      fit: BoxFit.fitHeight,
+      child: Column(
+        children: [
+          Container(
+            height: 100,
+          ),
+          Container()
+        ],
+      ),
+    )),
+
+    //segunda opção de página
+    Container(),
+  ];
 
   void _onItemTap(int index) {
     setState(() {
@@ -48,6 +63,9 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
           ),
         ),
       ),
+      body: Container(
+        child: _children[_selectedIndex],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         selectedItemColor: MyColors.corPrincipal,
@@ -66,6 +84,31 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
         onTap: _onItemTap,
       ),
       backgroundColor: MyColors.corBasica,
+    );
+  }
+
+  Widget botao(String texto) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [MyColors.corPrincipal, MyColors.corSecundaria],
+          begin: Alignment.bottomRight,
+          end: Alignment.topLeft,
+        ),
+        borderRadius: BorderRadius.circular(50),
+      ),
+      height: 45,
+      width: 180,
+      child: Center(
+        child: Text(
+          texto,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 25,
+            fontFamily: "CaviarDreams",
+          ),
+        ),
+      ),
     );
   }
 }

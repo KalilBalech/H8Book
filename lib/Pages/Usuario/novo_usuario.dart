@@ -45,16 +45,14 @@ class _NovoUsuarioState extends State<NovoUsuario> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: const Icon(Icons.navigate_before_rounded),
-              onPressed: () { 
-                Navigator.pop(context);
-              },
-            );
-          }
-        ),
+        leading: Builder(builder: (BuildContext context) {
+          return IconButton(
+            icon: const Icon(Icons.navigate_before_rounded),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          );
+        }),
         flexibleSpace: Container(
           decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -379,66 +377,86 @@ class _NovoUsuarioState extends State<NovoUsuario> {
                   padding: EdgeInsets.symmetric(horizontal: 5),
                   child: Form(
                     key: _emailKey,
-                      child: TextFormField(
-                        validator: (valor) {
-                          if (valor.isEmpty) {
-                            return 'Escreva seu email';
-                          }
-                          if(!valor.contains("@")){
-                            return 'Email inválido';
-                          }
-                          return null;
-                        },
-                        keyboardType: TextInputType.emailAddress,
-                        autofillHints: [AutofillHints.email],
-                        controller: _email,
-                        decoration: InputDecoration(
-                          labelText: "Email",
-                          labelStyle: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 29,
-                            fontWeight: FontWeight.w400,
-                            fontFamily: "DancingScript",
-                          ),
-                          icon: Icon(Icons.email_outlined),
+                    child: TextFormField(
+                      validator: (valor) {
+                        if (valor.isEmpty) {
+                          return 'Escreva seu email';
+                        }
+                        if (!valor.contains("@")) {
+                          return 'Email inválido';
+                        }
+                        return null;
+                      },
+                      keyboardType: TextInputType.emailAddress,
+                      autofillHints: [AutofillHints.email],
+                      controller: _email,
+                      decoration: InputDecoration(
+                        labelText: "Email",
+                        labelStyle: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 29,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: "DancingScript",
                         ),
+                        icon: Icon(Icons.email_outlined),
                       ),
+                    ),
                   ),
                 ),
                 SizedBox(height: 40),
-                _loginInvalido ? Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: Text("Nome de bixo e turma digitados já se encontram em nossa base de dados",
-                  style: TextStyle(
-                    fontFamily: "CaviarDreams",
-                    fontWeight: FontWeight.bold,
-                    color: Colors.red,
-                    fontSize: 15,
-                  ),
-                  ),
-                ) : Container(),
+                _loginInvalido
+                    ? Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: Text(
+                          "Nome de bixo e turma digitados já se encontram em nossa base de dados",
+                          style: TextStyle(
+                            fontFamily: "CaviarDreams",
+                            fontWeight: FontWeight.bold,
+                            color: Colors.red,
+                            fontSize: 15,
+                          ),
+                        ),
+                      )
+                    : Container(),
                 SizedBox(height: 20),
                 GestureDetector(
-                  onTap: () {
-                    if (_nomeDeBixoKey.currentState.validate() && _turmaKey.currentState.validate() && _senhaKey.currentState.validate() && _confirmarSenhaKey.currentState.validate() && 
-                    _blocoKey.currentState.validate() && _apartamentoKey.currentState.validate() && _vagaKey.currentState.validate() && _emailKey.currentState.validate()) {
-                      FirebaseFirestore.instance.collection('Usuários').doc(_nomeDeBixo.text+_turma.text).get().then((DocumentSnapshot documentSnapshot) {
-                        if (!documentSnapshot.exists ) {
-                          registrarUsuario(_nomeDeBixo.text, _turma.text, _senha.text, _bloco.text, int.parse(_apartamento.text), _vaga.text, _email.text);
-                          Navigator.push(
-                             context,
-                             MaterialPageRoute(builder: (context) =>  SuaBiblioteca(nomeBixo: _nomeDeBixo.text, turma: _turma.text)
-                          ));
-                        }
-                        else 
-                          setState(() {
-                            _loginInvalido = true;            
-                          });
+                    onTap: () {
+                      if (_nomeDeBixoKey.currentState.validate() &&
+                          _turmaKey.currentState.validate() &&
+                          _senhaKey.currentState.validate() &&
+                          _confirmarSenhaKey.currentState.validate() &&
+                          _blocoKey.currentState.validate() &&
+                          _apartamentoKey.currentState.validate() &&
+                          _vagaKey.currentState.validate() &&
+                          _emailKey.currentState.validate()) {
+                        FirebaseFirestore.instance
+                            .collection('Usuários')
+                            .doc(_nomeDeBixo.text + _turma.text)
+                            .get()
+                            .then((DocumentSnapshot documentSnapshot) {
+                          if (!documentSnapshot.exists) {
+                            registrarUsuario(
+                                _nomeDeBixo.text,
+                                _turma.text,
+                                _senha.text,
+                                _bloco.text,
+                                int.parse(_apartamento.text),
+                                _vaga.text,
+                                _email.text);
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SuaBiblioteca(
+                                        nomeBixo: _nomeDeBixo.text,
+                                        turma: _turma.text)));
+                          } else
+                            setState(() {
+                              _loginInvalido = true;
+                            });
                         });
                       }
                     },
-                    child: botao("Avançar ->")
-                ),
+                    child: botao("Avançar ->")),
                 SizedBox(height: 50),
               ],
             ),
@@ -529,16 +547,19 @@ Widget botao(String texto) {
   );
 }
 
-void registrarUsuario(String nomedebixo, String turma, String senha, String bloco, int apartamento, String vaga, String email ){
-
+void registrarUsuario(String nomedebixo, String turma, String senha,
+    String bloco, int apartamento, String vaga, String email) {
   var informacoesUsuario = {
     "id": nomedebixo + turma,
     "Senha": senha,
     "Bloco": bloco,
     "Apartamento": apartamento,
-    "Vaga": vaga
+    "Vaga": vaga,
+    "Email": email
   };
 
-  FirebaseFirestore.instance.collection("Usuários").doc(nomedebixo+turma).set(informacoesUsuario);
-
+  FirebaseFirestore.instance
+      .collection("Usuários")
+      .doc(nomedebixo + turma)
+      .set(informacoesUsuario);
 }
