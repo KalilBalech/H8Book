@@ -4,6 +4,12 @@ import 'Home.dart';
 import 'Perfil.dart';
 
 class PaginaPrincipal extends StatefulWidget {
+
+  final String nomeDeBixo;
+  final String turma;
+
+  PaginaPrincipal({this.nomeDeBixo, this.turma});
+
   @override
   _PaginaPrincipalState createState() => _PaginaPrincipalState();
 }

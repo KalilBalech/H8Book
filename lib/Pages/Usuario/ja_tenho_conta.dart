@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:h_book/Pages/PaginaPrincipal/pagina_principal.dart';
 import '../../config/my_colors.dart';
-import '../../config/Text_format.dart';
 import 'recuperar_senha.dart';
 
 class JaTenhoConta extends StatefulWidget {
@@ -15,19 +14,16 @@ class _JaTenhoContaState extends State<JaTenhoConta> {
 
   TextEditingController _nomeDeBixoInputController = TextEditingController();
   TextEditingController _senhaInputController = TextEditingController();
+  TextEditingController _turmaInputController = TextEditingController();
 
   bool _secureText = true;
   bool continuarConectado = false;
+  bool _loginInvalido = false;
 
   String _senhaIncompativel;
-
+  String nomeDeBixo;
+  String turma;
   Stream usuariosCadastrados;
-
-    @override
-  void initState(){
-    usuariosCadastrados = FirebaseFirestore.instance.collection("Usuários").snapshots();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,9 +63,8 @@ class _JaTenhoContaState extends State<JaTenhoConta> {
           child: Center(
             child: Column(
               children: [
-                SizedBox(height: 20),
+                SizedBox(height: 10),
                 titulo("Alto lá. Identifique-se!"),
-                SizedBox(height: 35),
                 Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -79,7 +74,6 @@ class _JaTenhoContaState extends State<JaTenhoConta> {
                   padding: EdgeInsets.symmetric(horizontal: 5),
                   child: TextField(
                     controller: _nomeDeBixoInputController,
-                    inputFormatters: [UpperCaseText()],
                     decoration: InputDecoration(
                       labelText: "Nome de bixo",
                         labelStyle: TextStyle(
@@ -89,6 +83,29 @@ class _JaTenhoContaState extends State<JaTenhoConta> {
                           fontFamily: "DancingScript",
                         ),
                       icon: Icon(Icons.person), 
+                    ),
+                  ),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding: EdgeInsets.symmetric(horizontal: 5),
+                  child: TextField(
+                    controller: _turmaInputController,
+                    keyboardType: TextInputType.number,
+                    maxLength: 2,
+                    decoration: InputDecoration(
+                      labelText: "Turma",
+                      labelStyle: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 29,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: "DancingScript",
+                      ),
+                      icon: Icon(Icons.person),
                     ),
                   ),
                 ),
@@ -142,7 +159,6 @@ class _JaTenhoContaState extends State<JaTenhoConta> {
                             decoration: TextDecoration.underline,
                             color: Colors.black,
                             fontSize: 15,
-                            fontWeight: FontWeight.w400,
                             fontFamily: "CaviarDreams", 
                           ),
                         ),
@@ -150,7 +166,16 @@ class _JaTenhoContaState extends State<JaTenhoConta> {
                     ]
                   ),
                 ),
-                SizedBox(height: 10),
+                SizedBox(height: 40),
+                _loginInvalido ? Text("Nome de Bixo, turma ou senha inválido(s)",
+                style: TextStyle(
+                  fontFamily: "CaviarDreams",
+                  fontWeight: FontWeight.bold,
+                  color: Colors.red,
+                  fontSize: 15,
+                ),
+                ) : Container(),
+                /*SizedBox(height: 10),
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                   child: Row(
@@ -174,18 +199,25 @@ class _JaTenhoContaState extends State<JaTenhoConta> {
                       )
                     ],
                   ),
-                ),
-                SizedBox(height: 80),
+                ),*/
+                SizedBox(height:20),
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) =>  PaginaPrincipal()
-                    ));
+                    FirebaseFirestore.instance.collection('Usuários').doc(_nomeDeBixoInputController.text+_turmaInputController.text).get().then((DocumentSnapshot documentSnapshot) {
+                      if (documentSnapshot.exists && documentSnapshot['Senha'] == _senhaInputController.text) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) =>  PaginaPrincipal(nomeDeBixo: _nomeDeBixoInputController.text, turma: _turmaInputController.text)
+                        ));
+                      }
+                      else 
+                        setState(() {
+                            _loginInvalido = true;            
+                        });
+                    });
                   },
-                  child: botao("Avançar ->")
+                  child: botao("Avançar ->"),
                 ),
-                SizedBox(height: 50),
               ],
             ),
           ),

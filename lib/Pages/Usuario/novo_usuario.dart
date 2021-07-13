@@ -31,14 +31,15 @@ class _NovoUsuarioState extends State<NovoUsuario> {
   TextEditingController _email = TextEditingController();
 
   String nomeBixo;
+  bool _loginInvalido = false;
 
-  Stream usuariosCadastrados;
+  /*Stream usuariosCadastrados;
 
   @override
   void initState(){
     usuariosCadastrados = FirebaseFirestore.instance.collection("Usuários").snapshots();
     super.initState();
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -404,19 +405,40 @@ class _NovoUsuarioState extends State<NovoUsuario> {
                       ),
                   ),
                 ),
-                SizedBox(height: 30),
+                SizedBox(height: 40),
+                _loginInvalido ? Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Text("Nome de bixo e turma digitados já se encontram em nossa base de dados",
+                  style: TextStyle(
+                    fontFamily: "CaviarDreams",
+                    fontWeight: FontWeight.bold,
+                    color: Colors.red,
+                    fontSize: 15,
+                  ),
+                  ),
+                ) : Container(),
+                SizedBox(height: 20),
                 GestureDetector(
-                    onTap: () {
-                      if (_nomeDeBixoKey.currentState.validate() && _turmaKey.currentState.validate() && _senhaKey.currentState.validate() && _confirmarSenhaKey.currentState.validate() && 
-                      _blocoKey.currentState.validate() && _apartamentoKey.currentState.validate() && _vagaKey.currentState.validate() && _emailKey.currentState.validate()) {
-                          registrarUsuario( _nomeDeBixo.text, _turma.text , _senha.text, _bloco.text, int.parse(_apartamento.text), _vaga.text, _email.text);
+                  onTap: () {
+                    if (_nomeDeBixoKey.currentState.validate() && _turmaKey.currentState.validate() && _senhaKey.currentState.validate() && _confirmarSenhaKey.currentState.validate() && 
+                    _blocoKey.currentState.validate() && _apartamentoKey.currentState.validate() && _vagaKey.currentState.validate() && _emailKey.currentState.validate()) {
+                      FirebaseFirestore.instance.collection('Usuários').doc(_nomeDeBixo.text+_turma.text).get().then((DocumentSnapshot documentSnapshot) {
+                        if (!documentSnapshot.exists ) {
+                          registrarUsuario(_nomeDeBixo.text, _turma.text, _senha.text, _bloco.text, int.parse(_apartamento.text), _vaga.text, _email.text);
                           Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) =>  SuaBiblioteca(nomeBixo: _nomeDeBixo.text,turma: _turma.text,)
+                             context,
+                             MaterialPageRoute(builder: (context) =>  SuaBiblioteca(nomeBixo: _nomeDeBixo.text, turma: _turma.text)
                           ));
+                        }
+                        else 
+                          setState(() {
+                            _loginInvalido = true;            
+                          });
+                        });
                       }
                     },
-                    child: botao("Avançar ->")),
+                    child: botao("Avançar ->")
+                ),
                 SizedBox(height: 50),
               ],
             ),
