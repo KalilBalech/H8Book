@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import '../../config/my_colors.dart';
+import 'Perfil.dart';
+import 'Home.dart';
+
+String nome = "";
+String turma = "";
 
 class PaginaPrincipal extends StatefulWidget {
   final String nomeDeBixo;
@@ -16,21 +21,10 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
 
   final List<Widget> _children = [
     //primeira opção de página
-    Container(
-        child: FittedBox(
-      fit: BoxFit.fitHeight,
-      child: Column(
-        children: [
-          Container(
-            height: 100,
-          ),
-          Container()
-        ],
-      ),
-    )),
+    Home(),
 
     //segunda opção de página
-    Container(),
+    Perfil(),
   ];
 
   void _onItemTap(int index) {
@@ -41,11 +35,13 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
 
   @override
   Widget build(BuildContext context) {
+    nome = widget.nomeDeBixo;
+    turma = widget.turma;
     return Scaffold(
       appBar: AppBar(
         leading: Container(),
         title: new Text(
-          "H8Book",
+          widget.nomeDeBixo,
           style: TextStyle(
             color: Colors.black,
             fontSize: 40,
