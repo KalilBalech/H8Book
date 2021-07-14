@@ -29,6 +29,7 @@ class _RecuperarSenhaState extends State<RecuperarSenha> {
     return Scaffold(
       backgroundColor: MyColors.corBasica,
       appBar: AppBar(
+        titleSpacing: 0,
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
@@ -68,46 +69,12 @@ class _RecuperarSenhaState extends State<RecuperarSenha> {
                   "Preencha seus dados",
                   style: TextStyle(
                     color: MyColors.corPrincipal,
-                    fontSize: 29,
+                    fontSize: 35,
                     fontWeight: FontWeight.w400,
                     fontFamily: "DancingScript",
                   ),
                 ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  padding: EdgeInsets.symmetric(horizontal: 5),
-                  child: Form(
-                    key: _emailKey,
-                    child: TextFormField(
-                      validator: (valor) {
-                        if (valor.isEmpty) {
-                          return 'Escreva seu email';
-                        }
-                        if (!valor.contains("@")) {
-                          return 'Email inválido';
-                        }
-                        return null;
-                      },
-                      keyboardType: TextInputType.emailAddress,
-                      autofillHints: [AutofillHints.email],
-                      controller: _email,
-                      decoration: InputDecoration(
-                        labelText: "Email",
-                        labelStyle: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 29,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: "DancingScript",
-                        ),
-                        icon: Icon(Icons.email_outlined),
-                      ),
-                    ),
-                  ),
-                ),
+                SizedBox(height: 20),
                 Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -170,13 +137,48 @@ class _RecuperarSenhaState extends State<RecuperarSenha> {
                     ),
                   ),
                 ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding: EdgeInsets.symmetric(horizontal: 5),
+                  child: Form(
+                    key: _emailKey,
+                    child: TextFormField(
+                      validator: (valor) {
+                        if (valor.isEmpty) {
+                          return 'Escreva seu email';
+                        }
+                        if (!valor.contains("@")) {
+                          return 'Email inválido';
+                        }
+                        return null;
+                      },
+                      keyboardType: TextInputType.emailAddress,
+                      autofillHints: [AutofillHints.email],
+                      controller: _email,
+                      decoration: InputDecoration(
+                        labelText: "Email",
+                        labelStyle: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 29,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: "DancingScript",
+                        ),
+                        icon: Icon(Icons.email_outlined),
+                      ),
+                    ),
+                  ),
+                ),
                 SizedBox(
                   height: 40,
                 ),
                 _dadosIncorretos
                     ? Container(
                         child: Text(
-                          "Dados inseridos incorretos",
+                          "Dados incorretos",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: "CaviarDreams",
@@ -187,25 +189,17 @@ class _RecuperarSenhaState extends State<RecuperarSenha> {
                         ),
                       )
                     : Container(),
-                SizedBox(
-                  height: 40,
-                ),
+                SizedBox(height: 10),
                 GestureDetector(
-                    onTap: () async {
-                      await FirebaseFirestore.instance
-                          .collection('Usuários')
-                          .doc(_nomeDeBixo.text + _turma.text)
-                          .get()
-                          .then((DocumentSnapshot documentSnapshot) {
-                        if (documentSnapshot.exists &&
-                            documentSnapshot['Email'] == _email.text) {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => RedefinirSenha(
-                                      nomeDeBixo: _nomeDeBixo.text,
-                                      turma: _turma.text)));
-                        } else {
+                    onTap: () {
+                      FirebaseFirestore.instance.collection('Usuários').doc(_nomeDeBixo.text+_turma.text).get().then((DocumentSnapshot documentSnapshot) {
+                      if (documentSnapshot.exists && documentSnapshot['Email'] == _email.text) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) =>  RedefinirSenha(nomeDeBixo: _nomeDeBixo.text, turma: _turma.text)
+                        ));
+                      } 
+                        else {
                           setState(() {
                             _dadosIncorretos = true;
                           });
@@ -235,13 +229,13 @@ class _RecuperarSenhaState extends State<RecuperarSenha> {
         borderRadius: BorderRadius.circular(50),
       ),
       height: 45,
-      width: 180,
+      width: 230,
       child: Center(
         child: Text(
           texto,
           style: TextStyle(
             color: Colors.black,
-            fontSize: 15,
+            fontSize: 25,
             fontFamily: "CaviarDreams",
           ),
         ),
@@ -266,7 +260,7 @@ Widget titulo(String texto) {
             ),
           ),
         ),
-        SizedBox(height: 30),
+        SizedBox(height: 20),
       ],
     ),
   );

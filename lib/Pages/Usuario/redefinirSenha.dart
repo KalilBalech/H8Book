@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:h_book/Pages/Usuario/reconhecimento.dart';
 import 'package:h_book/config/my_colors.dart';
 
 class RedefinirSenha extends StatefulWidget {
@@ -14,7 +16,6 @@ class RedefinirSenha extends StatefulWidget {
 
 class _RedefinirSenhaState extends State<RedefinirSenha> {
   bool _secureText = true;
-  bool _recuperado = false;
 
   TextEditingController _novaSenha = TextEditingController();
   TextEditingController _confirmarNovaSenha = TextEditingController();
@@ -27,15 +28,8 @@ class _RedefinirSenhaState extends State<RedefinirSenha> {
     return Scaffold(
       backgroundColor: MyColors.corBasica,
       appBar: AppBar(
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-                icon: Icon(Icons.navigate_before_rounded),
-                onPressed: () {
-                  Navigator.pop(context);
-                });
-          },
-        ),
+        leading: Container(),
+        titleSpacing: 0,
         flexibleSpace: Container(
           decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -153,39 +147,24 @@ class _RedefinirSenhaState extends State<RedefinirSenha> {
                   SizedBox(
                     height: 40,
                   ),
-                  _recuperado
-                      ? Container(
-                          child: Text(
-                            "Senha redefinida com sucesso!\n\nPressione voltar para logar normalmente",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontFamily: "CaviarDreams",
-                              fontWeight: FontWeight.bold,
-                              color: Colors.red,
-                              fontSize: 15,
-                            ),
-                          ),
-                        )
-                      : Container(),
-                  SizedBox(
-                    height: 40,
-                  ),
+                  SizedBox(height: 130),
                   GestureDetector(
                       onTap: () {
                         if (_novaSenhaKey.currentState.validate() &&
                             _confirmarNovaSenhaKey.currentState.validate()) {
-                          DocumentReference documento = FirebaseFirestore
-                              .instance
-                              .collection("Usuários")
-                              .doc(widget.nomeDeBixo + widget.turma);
-
-                          documento.update(
-                              <String, Object>{"Senha": _novaSenha.text});
-                          {
-                            setState(() {
-                              _recuperado = true;
-                            });
-                          }
+                          FirebaseFirestore.instance.collection("Usuários").doc(widget.nomeDeBixo + widget.turma).update({"Senha": _novaSenha.text});
+                          Fluttertoast.showToast(
+                            msg: "Senha redefinida com sucesso!",
+                            backgroundColor: MyColors.corPrincipal,
+                            textColor: MyColors.corSecundaria,
+                            toastLength: Toast.LENGTH_SHORT,
+                            timeInSecForIosWeb: 1,
+                            fontSize: 16
+                          );
+                          Navigator.push(
+                             context,
+                             MaterialPageRoute(builder: (context) =>  Reconhecimento()
+                          ));
                         }
                       },
                       child: botao("Redefinir Senha")),
@@ -212,13 +191,13 @@ class _RedefinirSenhaState extends State<RedefinirSenha> {
         borderRadius: BorderRadius.circular(50),
       ),
       height: 45,
-      width: 180,
+      width: 230,
       child: Center(
         child: Text(
           texto,
           style: TextStyle(
             color: Colors.black,
-            fontSize: 15,
+            fontSize: 25,
             fontFamily: "CaviarDreams",
           ),
         ),
@@ -243,7 +222,7 @@ Widget titulo(String texto) {
             ),
           ),
         ),
-        SizedBox(height: 30),
+        SizedBox(height: 120),
       ],
     ),
   );
