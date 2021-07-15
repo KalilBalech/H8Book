@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:h_book/Pages/PaginaPrincipal/MeusLivros.dart';
 import '../../config/my_colors.dart';
 import 'Perfil.dart';
 import 'Home.dart';
@@ -20,10 +21,8 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
   int _selectedIndex = 0;
 
   final List<Widget> _children = [
-    //primeira opção de página
     Home(),
-
-    //segunda opção de página
+    MeusLivros(),
     Perfil(),
   ];
 
@@ -37,49 +36,56 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
   Widget build(BuildContext context) {
     nome = widget.nomeDeBixo;
     turma = widget.turma;
-    return Scaffold(
-      appBar: AppBar(
-        leading: Container(),
-        title: new Text(
-          widget.nomeDeBixo,
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 40,
-            fontFamily: "DancingScript",
+    return WillPopScope(
+      onWillPop: () => Future.value(false),
+      child: Scaffold(
+        appBar: AppBar(
+          leading: Container(),
+          title: new Text(
+            widget.nomeDeBixo+widget.turma,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 30,
+              fontFamily: "CaviarDreams",
+            ),
           ),
-        ),
-        titleSpacing: 0, //it is 16 by default
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [MyColors.corPrincipal, MyColors.corSecundaria],
-              begin: Alignment.bottomRight,
-              end: Alignment.topLeft,
+          titleSpacing: 0, //it is 16 by default
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [MyColors.corPrincipal, MyColors.corSecundaria],
+                begin: Alignment.bottomRight,
+                end: Alignment.topLeft,
+              ),
             ),
           ),
         ),
-      ),
-      body: Container(
-        child: _children[_selectedIndex],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: MyColors.corPrincipal,
+        body: Container(
+          child: _children[_selectedIndex],
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          selectedItemColor: MyColors.corPrincipal,
+          backgroundColor: MyColors.corBasica,
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: "Home",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.local_library),
+              label: "Meus livros",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person_outline_rounded),
+              label: "Perfil",
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          onTap: _onItemTap,
+        ),
         backgroundColor: MyColors.corBasica,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "Home",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline_rounded),
-            label: "Perfil",
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        onTap: _onItemTap,
       ),
-      backgroundColor: MyColors.corBasica,
     );
   }
 

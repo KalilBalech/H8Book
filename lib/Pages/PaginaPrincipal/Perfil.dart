@@ -1,8 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:h_book/Pages/PaginaPrincipal/pagina_principal.dart';
+import 'package:h_book/Pages/Usuario/reconhecimento.dart';
 import '../../config/my_colors.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class Perfil extends StatefulWidget {
   Perfil();
@@ -12,10 +10,6 @@ class Perfil extends StatefulWidget {
 }
 
 class _PerfilState extends State<Perfil> {
-  TextEditingController _livroInputController = TextEditingController();
-  TextEditingController _autorInputController = TextEditingController();
-  bool livroErro = false;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,102 +18,14 @@ class _PerfilState extends State<Perfil> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              titulo("Seu perfil"),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                padding: EdgeInsets.symmetric(horizontal: 5),
-                child: TextField(
-                  controller: _livroInputController,
-                  decoration: InputDecoration(
-                    hintText: "Título do livro",
-                    hintStyle: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 29,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: "DancingScript",
-                    ),
-                    icon: Icon(Icons.local_library),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                padding: EdgeInsets.symmetric(horizontal: 5),
-                child: TextField(
-                  controller: _autorInputController,
-                  decoration: InputDecoration(
-                    hintText: "Autor",
-                    hintStyle: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 29,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: "DancingScript",
-                    ),
-                    icon: Icon(Icons.person),
-                  ),
-                ),
-              ),
-              SizedBox(height: 30),
-              livroErro
-                  ? Text(
-                      "Insira um valor válido no livro e autor",
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontSize: 15,
-                      ),
-                    )
-                  : Container(),
-              SizedBox(
-                height: 30,
-              ),
+              Center(child: titulo("Perfil")),
               GestureDetector(
                 onTap: () {
-                  if (_livroInputController.text.isNotEmpty &&
-                      _autorInputController.text.isNotEmpty) {
-                    registrarLivro(
-                      _livroInputController.text,
-                      _autorInputController.text,
-                      nome,
-                      turma,
-                    );
-                    setState(() {
-                      livroErro = false;
-                      _livroInputController.text = "";
-                      _autorInputController.text = "";
-                    });
-                    Fluttertoast.showToast(
-                        msg: "Livro adicionado com sucesso!",
-                        backgroundColor: MyColors.corPrincipal,
-                        textColor: MyColors.corSecundaria,
-                        toastLength: Toast.LENGTH_SHORT,
-                        timeInSecForIosWeb: 1,
-                        fontSize: 16);
-
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => PaginaPrincipal(
-                                  nomeDeBixo: nome,
-                                  turma: turma,
-                                )));
-                  } else {
-                    setState(() {
-                      livroErro = true;
-                    });
-                  }
+                  showAlertDialog(context);
                 },
                 child: Container(
+                  height: 45,
+                  width: 160,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [MyColors.corPrincipal, MyColors.corSecundaria],
@@ -128,22 +34,22 @@ class _PerfilState extends State<Perfil> {
                     ),
                     borderRadius: BorderRadius.circular(50),
                   ),
-                  margin: EdgeInsets.symmetric(horizontal: 10),
-                  padding: EdgeInsets.all(10),
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  margin: EdgeInsets.symmetric(vertical: 10),
                   child: Row(children: [
-                    Icon(Icons.add),
+                    Icon(Icons.logout),
                     SizedBox(width: 10),
                     Text(
-                      "Adicionar livro ao seu Perfil",
+                      "Logout",
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 29,
-                        fontFamily: "DancingScript",
+                        fontFamily: "CaviarDreams",
                       ),
                     ),
                   ]),
                 ),
-              ),
+              )
             ],
           ),
         ),
@@ -152,27 +58,62 @@ class _PerfilState extends State<Perfil> {
   }
 }
 
-void registrarLivro(
-    String nomeLivro, String autorLivro, String nomedebixo, String turma) {
-  var informacoesLivro = {
-    "nomelivro": nomeLivro,
-    "autor": autorLivro,
-    "dono": nomedebixo,
-  };
+showAlertDialog(BuildContext context) {
+  Widget cancelaButton = FlatButton(
+    child: Text("Cancelar"),
+    onPressed: () {
+      Navigator.pop(context);
+    },
+  );
+  Widget continuaButton = FlatButton(
+    child: Text("Continar"),
+    onPressed: () {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => Reconhecimento()));
+    },
+  );
+  //configura o AlertDialog
+  AlertDialog alert = AlertDialog(
+    backgroundColor: MyColors.corSecundaria,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+    content: Text("Deseja fazer o Logout?"),
+    actions: [
+      cancelaButton,
+      continuaButton,
+    ],
+  );
+  //exibe o diálogo
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
 
-  //salvando na coleção de todos os livros
-  FirebaseFirestore.instance
-      .collection("Livros Registrados")
-      .doc(nomeLivro)
-      .set(informacoesLivro);
-
-  //salvando na coleção com os livros de cada usuário
-  FirebaseFirestore.instance
-      .collection("Usuários")
-      .doc(nome + turma)
-      .collection("MeusLivros")
-      .doc(nomeLivro)
-      .set(informacoesLivro);
+Widget botao(String texto) {
+  return Container(
+    decoration: BoxDecoration(
+      gradient: LinearGradient(
+        colors: [MyColors.corPrincipal, MyColors.corSecundaria],
+        begin: Alignment.bottomRight,
+        end: Alignment.topLeft,
+      ),
+      borderRadius: BorderRadius.circular(50),
+    ),
+    height: 45,
+    width: 180,
+    child: Center(
+      child: Text(
+        texto,
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 25,
+          fontFamily: "CaviarDreams",
+        ),
+      ),
+    ),
+  );
 }
 
 Widget titulo(String texto) {

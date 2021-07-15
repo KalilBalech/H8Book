@@ -2,7 +2,7 @@
     package="kalil.myapp.H8Book">
    <application
         android:label="H8Book"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
