@@ -114,7 +114,8 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => PaginaPrincipal()));
+                          builder: (context) =>
+                              PaginaPrincipal(nomeDeBixo: nome, turma: turma)));
                 } else {
                   setState(() {
                     livroErro = true;

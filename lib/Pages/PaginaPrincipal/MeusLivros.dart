@@ -28,104 +28,52 @@ class _MeusLivrosState extends State<MeusLivros> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.corBasica,
-      body: Column(
-        children: [
-          titulo("Meus livros"),
-          todosLivros(),
-          SizedBox(
-            height: 10,
-          ),
-          /*Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            margin: EdgeInsets.symmetric(horizontal: 20),
-            padding: EdgeInsets.symmetric(horizontal: 5),
-            child: TextField(
-              controller: _livroInputController,
-              decoration: InputDecoration(
-                hintText: "Título do livro",
-                hintStyle: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 29,
-                  fontWeight: FontWeight.w400,
-                  fontFamily: "DancingScript",
-                ),
-                icon: Icon(Icons.local_library),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            children: [
+              titulo("Meus livros"),
+              todosMeusLivros(),
+              SizedBox(
+                height: 10,
               ),
-            ),
-          ),
-          SizedBox(
-            height: 30,
-          ),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            padding: EdgeInsets.symmetric(horizontal: 5),
-            child: TextField(
-              controller: _autorInputController,
-              decoration: InputDecoration(
-                hintText: "Autor",
-                hintStyle: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 29,
-                  fontWeight: FontWeight.w400,
-                  fontFamily: "DancingScript",
-                ),
-                icon: Icon(Icons.person),
-              ),
-            ),
-          ),
-          SizedBox(height: 30),
-          livroErro
-              ? Text(
-                  "Insira valores válidos nos campos de texto",
-                  style: TextStyle(
-                    color: Colors.red,
-                    fontSize: 15,
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AdicionarLivro()));
+                },
+                child: Container(
+                  height: 45,
+                  width: 230,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [MyColors.corPrincipal, MyColors.corSecundaria],
+                      begin: Alignment.bottomRight,
+                      end: Alignment.topLeft,
+                    ),
+                    borderRadius: BorderRadius.circular(50),
                   ),
-                )
-              : Container(),
-          SizedBox(
-            height: 10,
-          ),*/
-          GestureDetector(
-            onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => AdicionarLivro()));
-            },
-            child: Container(
-              height: 45,
-              width: 230,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [MyColors.corPrincipal, MyColors.corSecundaria],
-                  begin: Alignment.bottomRight,
-                  end: Alignment.topLeft,
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  margin: EdgeInsets.symmetric(vertical: 10),
+                  child: Row(children: [
+                    Icon(Icons.add),
+                    SizedBox(width: 10),
+                    Text(
+                      "Adicionar livro",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 25,
+                        fontFamily: "CaviarDreams",
+                      ),
+                    ),
+                  ]),
                 ),
-                borderRadius: BorderRadius.circular(50),
               ),
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              margin: EdgeInsets.symmetric(vertical: 10),
-              child: Row(children: [
-                Icon(Icons.add),
-                SizedBox(width: 10),
-                Text(
-                  "Adicionar livro",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 25,
-                    fontFamily: "CaviarDreams",
-                  ),
-                ),
-              ]),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -167,13 +115,17 @@ class _MeusLivrosState extends State<MeusLivros> {
                     .collection("Meus Livros")
                     .doc(nomedolivro)
                     .delete();
+                FirebaseFirestore.instance
+                    .collection("Livros Registrados")
+                    .doc(nome + turma + nomedolivro)
+                    .delete();
               })
         ],
       ),
     );
   }
 
-  Widget todosLivros() {
+  Widget todosMeusLivros() {
     return StreamBuilder(
         stream: livros,
         builder: (context, snapshot) {

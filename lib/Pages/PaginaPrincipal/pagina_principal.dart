@@ -36,13 +36,14 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
   Widget build(BuildContext context) {
     nome = widget.nomeDeBixo;
     turma = widget.turma;
+
     return WillPopScope(
       onWillPop: () => Future.value(false),
       child: Scaffold(
         appBar: AppBar(
           leading: Container(),
           title: new Text(
-            widget.nomeDeBixo+widget.turma,
+            widget.nomeDeBixo + widget.turma,
             style: TextStyle(
               color: Colors.black,
               fontSize: 30,

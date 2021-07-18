@@ -11,63 +11,66 @@ class Reconhecimento extends StatefulWidget {
 class _ReconhecimentoState extends State<Reconhecimento> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: MyColors.corBasica,
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            children: [
-              SizedBox(height: 50),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Column(
-                  children: [
-                    Text(
-                      "Diz aí, iteano!",
-                      style: TextStyle(
-                        color: MyColors.corPrincipal,
-                        fontSize: 45,
-                        fontFamily: "DancingScript",
+    return WillPopScope(
+      onWillPop: () => Future.value(false),
+      child: Scaffold(
+        backgroundColor: MyColors.corBasica,
+        body: SafeArea(
+          child: Center(
+            child: Column(
+              children: [
+                SizedBox(height: 50),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Column(
+                    children: [
+                      Text(
+                        "Diz aí, iteano!",
+                        style: TextStyle(
+                          color: MyColors.corPrincipal,
+                          fontSize: 45,
+                          fontFamily: "DancingScript",
+                        ),
                       ),
-                    ),
-                    Text(
-                      "A gente já se conhece?",
-                      style: TextStyle(
-                        color: MyColors.corPrincipal,
-                        fontSize: 43,
-                        fontFamily: "DancingScript",
+                      Text(
+                        "A gente já se conhece?",
+                        style: TextStyle(
+                          color: MyColors.corPrincipal,
+                          fontSize: 43,
+                          fontFamily: "DancingScript",
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 170),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) =>  NovoUsuario()
-                        ));
-                      },
-                      child: botao("Novo usuário")
-                    ),
-                  SizedBox(height: 30),
-                  GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context)  => JaTenhoConta()
-                        ));
-                      },
-                      child: botao("Já tenho conta")
+                    ],
                   ),
-                  //Image.asset('assets/images/harry_potter.png'),
-                ],
-              )
-            ],
+                ),
+                SizedBox(height: 170),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) =>  NovoUsuario()
+                          ));
+                        },
+                        child: botao("Novo usuário")
+                      ),
+                    SizedBox(height: 30),
+                    GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context)  => JaTenhoConta()
+                          ));
+                        },
+                        child: botao("Já tenho conta")
+                    ),
+                    //Image.asset('assets/images/harry_potter.png'),
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),
