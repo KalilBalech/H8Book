@@ -5,8 +5,6 @@ import 'pagina_principal.dart';
 import '../../config/my_colors.dart';
 import '../../config/Text_format.dart';
 
-String bloco;
-
 class Perfil extends StatefulWidget {
   Perfil();
 
@@ -23,6 +21,28 @@ class _PerfilState extends State<Perfil> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: Container(),
+        title: new Text(
+          nome + turma,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 30,
+            fontFamily: "CaviarDreams",
+          ),
+        ),
+        titleSpacing: 0, //it is 16 by default
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [MyColors.corPrincipal, MyColors.corSecundaria],
+              begin: Alignment.bottomRight,
+              end: Alignment.topLeft,
+            ),
+          ),
+        ),
+        actions: [IconButton(icon: Icon(Icons.logout), onPressed: () {showAlertDialog(context);})],
+      ),
       backgroundColor: MyColors.corBasica,
       body: SafeArea(
         child: SingleChildScrollView(
@@ -30,40 +50,6 @@ class _PerfilState extends State<Perfil> {
             children: [
               Center(child: titulo("Perfil")),
               todosdados(),
-              SizedBox(
-                height: 40,
-              ),
-              GestureDetector(
-                onTap: () {
-                  showAlertDialog(context);
-                },
-                child: Container(
-                  height: 45,
-                  width: 240,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [MyColors.corPrincipal, MyColors.corSecundaria],
-                      begin: Alignment.bottomRight,
-                      end: Alignment.topLeft,
-                    ),
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  margin: EdgeInsets.symmetric(vertical: 10),
-                  child: Row(children: [
-                    Icon(Icons.logout),
-                    SizedBox(width: 10),
-                    Text(
-                      "Logout",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 29,
-                        fontFamily: "CaviarDreams",
-                      ),
-                    ),
-                  ]),
-                ),
-              ),
             ],
           ),
         ),
@@ -80,61 +66,63 @@ class _PerfilState extends State<Perfil> {
         builder:
             (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
           if (snapshot.hasData) {
-            bloco = snapshot.data["Bloco"];
-            return Column(
-              children: [
-                campoPerfil("Nome de Bixo", nome),
-                campoPerfil("Turma", turma),
-                Row(
-                  children: [
-                    campoPerfil("Bloco", snapshot.data["Bloco"]),
-                    Spacer(),
-                    IconButton(
-                        icon: Icon(Icons.edit),
-                        color: Colors.grey,
-                        onPressed: () {
-                          mostrarAlertaEditarBloco(context);
-                        }),
-                  ],
-                ),
-                Row(
-                  children: [
-                    campoPerfil(
-                        "Apartamento", snapshot.data["Apartamento"].toString()),
-                    Spacer(),
-                    IconButton(
-                        icon: Icon(Icons.edit),
-                        color: Colors.grey,
-                        onPressed: () {
-                          mostrarAlertaEditarAp(context);
-                        }),
-                  ],
-                ),
-                Row(
-                  children: [
-                    campoPerfil("Vaga", snapshot.data["Vaga"]),
-                    Spacer(),
-                    IconButton(
-                        icon: Icon(Icons.edit),
-                        color: Colors.grey,
-                        onPressed: () {
-                          mostrarAlertaEditarVaga(context);
-                        }),
-                  ],
-                ),
-                Row(
-                  children: [
-                    campoPerfil("E-mail", snapshot.data["Email"]),
-                    Spacer(),
-                    IconButton(
-                        icon: Icon(Icons.edit),
-                        color: Colors.grey,
-                        onPressed: () {
-                          mostrarAlertaEditarEmail(context);
-                        }),
-                  ],
-                ),
-              ],
+            return Container(
+              margin: EdgeInsets.symmetric(horizontal: 15),
+              child: Column(
+                children: [
+                  campoPerfil("Nome de Bixo", nome),
+                  campoPerfil("Turma", turma),
+                  Row(
+                    children: [
+                      campoPerfil("Bloco", snapshot.data["Bloco"]),
+                      Spacer(),
+                      IconButton(
+                          icon: Icon(Icons.edit),
+                          color: Colors.grey,
+                          onPressed: () {
+                            mostrarAlertaEditarBloco(context);
+                          }),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      campoPerfil("Apartamento",
+                          snapshot.data["Apartamento"].toString()),
+                      Spacer(),
+                      IconButton(
+                          icon: Icon(Icons.edit),
+                          color: Colors.grey,
+                          onPressed: () {
+                            mostrarAlertaEditarAp(context);
+                          }),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      campoPerfil("Vaga", snapshot.data["Vaga"]),
+                      Spacer(),
+                      IconButton(
+                          icon: Icon(Icons.edit),
+                          color: Colors.grey,
+                          onPressed: () {
+                            mostrarAlertaEditarVaga(context);
+                          }),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      campoPerfil("E-mail", snapshot.data["Email"]),
+                      Spacer(),
+                      IconButton(
+                          icon: Icon(Icons.edit),
+                          color: Colors.grey,
+                          onPressed: () {
+                            mostrarAlertaEditarEmail(context);
+                          }),
+                    ],
+                  ),
+                ],
+              ),
             );
           }
           //this will load first
@@ -520,47 +508,22 @@ Widget botao(String texto) {
   );
 }
 
-Widget campoPerfilEditavel(String campo, String dado) {
-  return Container(
-    height: 60,
-    child: Row(
-      children: [
-        SizedBox(width: 30),
-        Text(campo + ": ",
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 25,
-              fontWeight: FontWeight.bold,
-              fontFamily: "CaviarDreams",
-            )),
-        Text(dado,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 25,
-              fontFamily: "CaviarDreams",
-            )),
-      ],
-    ),
-  );
-}
-
 Widget campoPerfil(String campo, String dado) {
   return Container(
     height: 60,
     child: Row(
       children: [
-        SizedBox(width: 30),
         Text(campo + ": ",
             style: TextStyle(
               color: Colors.black,
-              fontSize: 25,
+              fontSize: 18,
               fontWeight: FontWeight.bold,
               fontFamily: "CaviarDreams",
             )),
         Text(dado,
             style: TextStyle(
               color: Colors.black,
-              fontSize: 25,
+              fontSize: 18,
               fontFamily: "CaviarDreams",
             )),
       ],

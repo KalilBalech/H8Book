@@ -21,6 +21,8 @@ class _JaTenhoContaState extends State<JaTenhoConta> {
   String _senhaIncompativel;
   String nomeDeBixo;
   String turma;
+  String inputNome = "";
+  String inputTurma = "";
   Stream usuariosCadastrados;
 
   @override
@@ -70,6 +72,9 @@ class _JaTenhoContaState extends State<JaTenhoConta> {
                   padding: EdgeInsets.symmetric(horizontal: 5),
                   child: TextField(
                     controller: _nomeDeBixoInputController,
+                    onChanged: (value) {
+                      inputNome = value;
+                    },
                     decoration: InputDecoration(
                       labelText: "Nome de bixo",
                       labelStyle: TextStyle(
@@ -90,6 +95,9 @@ class _JaTenhoContaState extends State<JaTenhoConta> {
                   margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   padding: EdgeInsets.symmetric(horizontal: 5),
                   child: TextField(
+                    onChanged: (value) {
+                      inputTurma = value;
+                    },
                     controller: _turmaInputController,
                     keyboardType: TextInputType.number,
                     maxLength: 2,
@@ -191,10 +199,12 @@ class _JaTenhoContaState extends State<JaTenhoConta> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => PaginaPrincipal(
-                                      nomeDeBixo:
-                                          _nomeDeBixoInputController.text,
-                                      turma: _turmaInputController.text,
-                                    )));
+                                    nomeDeBixo: _nomeDeBixoInputController.text,
+                                    turma: _turmaInputController.text,
+                                    bloco: documentSnapshot['Bloco'],
+                                    apartamento: documentSnapshot['Apartamento']
+                                        .toString(),
+                                    vaga: documentSnapshot['Vaga'])));
                         setState(() {
                           _loginInvalido = false;
                         });

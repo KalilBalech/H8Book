@@ -446,9 +446,9 @@ class _NovoUsuarioState extends State<NovoUsuario> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => SuaBiblioteca(
-                                        nomeBixo: _nomeDeBixo.text,
-                                        turma: _turma.text)));
+                                    builder: (context) => SuaBiblioteca(nomeBixo: _nomeDeBixo.text, turma: _turma.text, bloco: _bloco.text , 
+                                    apartamento: _apartamento.text, vaga: _vaga.text)
+                                ));
                           } else
                             setState(() {
                               _loginInvalido = true;

@@ -7,8 +7,11 @@ import '../../config/my_colors.dart';
 class SuaBiblioteca extends StatefulWidget {
   final String nomeBixo;
   final String turma;
+  final String bloco;
+  final String apartamento;
+  final String vaga;
 
-  SuaBiblioteca({this.nomeBixo, this.turma});
+  SuaBiblioteca({this.nomeBixo, this.turma, this.bloco, this.apartamento, this.vaga});
 
   @override
   _SuaBibliotecaState createState() => _SuaBibliotecaState();
@@ -16,12 +19,14 @@ class SuaBiblioteca extends StatefulWidget {
 
 class _SuaBibliotecaState extends State<SuaBiblioteca> {
 
-  TextEditingController _livro = TextEditingController();
+  TextEditingController _livroInputController = TextEditingController();
+  TextEditingController _autorInputController = TextEditingController();
+  bool _dadosInvalidos = false;
   Stream livros;
 
   @override
   void initState(){
-    livros = FirebaseFirestore.instance.collection("Usuários").doc(widget.nomeBixo+widget.turma).collection("Biblioteca").snapshots();
+    livros = FirebaseFirestore.instance.collection("Usuários").doc(widget.nomeBixo+widget.turma).collection("Meus Livros").snapshots();
     super.initState();
   }
 
@@ -56,8 +61,10 @@ class _SuaBibliotecaState extends State<SuaBiblioteca> {
             iconSize: 25, 
             onPressed: (){
               Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) =>  PaginaPrincipal()));
+                context, MaterialPageRoute(builder: (context) =>  PaginaPrincipal(nomeDeBixo: widget.nomeBixo, turma: widget.turma, bloco: widget.bloco, 
+                apartamento: widget.apartamento ,vaga: widget.vaga)
+              )
+            );
             }
           ),
         ],
@@ -80,39 +87,115 @@ class _SuaBibliotecaState extends State<SuaBiblioteca> {
               ),
               SizedBox(height: 30),
               Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                padding: EdgeInsets.symmetric(horizontal: 5),
-                child: TextField(
-                  controller: _livro,
-                  decoration: InputDecoration(
-                    hintText: "Título do livro",
-                    hintStyle: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 29,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: "DancingScript",
-                    ),
-                    icon: Icon(Icons.local_library),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        Icons.add,
-                        color: MyColors.corPrincipal,
-                      ),
-                      onPressed: () {
-                        if(_livro.text.isNotEmpty){
-                          FirebaseFirestore.instance.collection("Usuários").doc(widget.nomeBixo+widget.turma).collection("Biblioteca").doc(_livro.text).set({'nomeDoLivro' : _livro.text});
-                          _livro.text = "";
-                        }
-                      }
-                    )
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              margin: EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: 5),
+              child: TextField(
+                controller: _livroInputController,
+                decoration: InputDecoration(
+                  labelText: "Título do livro",
+                  labelStyle: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 29,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: "DancingScript",
                   ),
+                  icon: Icon(Icons.local_library_outlined),
                 ),
               ),
-              SizedBox(height: 30),
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              padding: EdgeInsets.symmetric(horizontal: 5),
+              child: TextField(
+                controller: _autorInputController,
+                decoration: InputDecoration(
+                  labelText: "Autor",
+                  labelStyle: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 29,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: "DancingScript",
+                  ),
+                  icon: Icon(Icons.person_outline_rounded),
+                ),
+              ),
+            ),
+            SizedBox(height: 20),
+            _dadosInvalidos
+                ? Text(
+                    "Insira valores válidos nos campos de texto",
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 15,
+                    ),
+                  )
+                : Container(),
+            SizedBox(
+              height: 10,
+            ),
+            GestureDetector(
+              onTap: () {
+                if (_livroInputController.text.isNotEmpty && _autorInputController.text.isNotEmpty) {
+                  FirebaseFirestore.instance
+                  .collection("Usuários")
+                  .doc(widget.nomeBixo + widget.turma)
+                  .collection("Meus Livros")
+                  .doc(_livroInputController.text)
+                  .set({'nome do livro': _livroInputController.text, 'autor': _autorInputController.text, 'dono': widget.nomeBixo, 'disponibilidade': true});
+                  FirebaseFirestore.instance.collection("Livros Registrados")
+                  .doc(widget.nomeBixo+widget.turma+_livroInputController.text)
+                  .set({'nome do livro': _livroInputController.text, 'autor': _autorInputController.text, 'dono': widget.nomeBixo, 'turma do dono': widget.turma, 'disponibilidade': true});
+                  _livroInputController.text = "";
+                  _autorInputController.text="";
+                  setState(() {
+                    _dadosInvalidos = false;                             
+                  });
+                }
+                else{
+                  setState(() {
+                    _dadosInvalidos = true;                             
+                  });
+                }
+              },
+              child: Container(
+                height: 45,
+                width: 230,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [MyColors.corPrincipal, MyColors.corSecundaria],
+                    begin: Alignment.bottomRight,
+                    end: Alignment.topLeft,
+                  ),
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                margin: EdgeInsets.symmetric(vertical: 10),
+                child: Row(children: [
+                  Icon(Icons.add),
+                  SizedBox(width: 10),
+                  Text(
+                    "Adicionar livro",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 25,
+                      fontFamily: "CaviarDreams",
+                    ),
+                  ),
+                ]),
+              ),
+            ),
+              SizedBox(height: 10),
                todosLivros()
             ],
           ),
@@ -121,7 +204,7 @@ class _SuaBibliotecaState extends State<SuaBiblioteca> {
     );
   }
 
-  Widget livro(String nomedolivro){
+  Widget livro(String nomedolivro, String autor){
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -136,23 +219,35 @@ class _SuaBibliotecaState extends State<SuaBiblioteca> {
             Icons.menu_book_rounded,
             color: MyColors.corPrincipal,
           ),
-          SizedBox(width: 7),
           Expanded(
-            child: Text(
-              nomedolivro,
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 18,
-                //fontWeight: FontWeight.w400,
-                fontFamily: "CaviarDreams",
-              ),
+            child: Column(
+              children: [
+                Text(
+                  nomedolivro,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: "CaviarDreams",
+                  ),
+                ),
+                Text(
+                  autor,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 14,
+                    //fontWeight: FontWeight.w400,
+                    fontFamily: "CaviarDreams",
+                  ),
+                ),
+              ],
             ),
           ),
           IconButton(
             icon: Icon(Icons.delete_outlined),
             color: Colors.grey, 
             onPressed: (){
-              FirebaseFirestore.instance.collection("Usuários").doc(widget.nomeBixo+widget.turma).collection("Biblioteca").doc(nomedolivro).delete();
+              FirebaseFirestore.instance.collection("Usuários").doc(widget.nomeBixo+widget.turma).collection("Meus Livros").doc(nomedolivro).delete();
             })
         ],
       ),
@@ -170,7 +265,7 @@ class _SuaBibliotecaState extends State<SuaBiblioteca> {
         return Column(
           children: [
             for(int i = 0; i < listaLivros.length; i++)
-              livro(listaLivros[i]["nomeDoLivro"]),
+              livro(listaLivros[i]["nome do livro"], listaLivros[i]["autor"]),
           ],
         );
       }

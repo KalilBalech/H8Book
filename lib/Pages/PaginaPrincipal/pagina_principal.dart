@@ -6,12 +6,18 @@ import 'Home.dart';
 
 String nome = "";
 String turma = "";
+String bloco = "";
+String apartamento = "";
+String vaga = "";
 
 class PaginaPrincipal extends StatefulWidget {
   final String nomeDeBixo;
   final String turma;
+  final String bloco;
+  final String apartamento;
+  final String vaga;
 
-  PaginaPrincipal({this.nomeDeBixo, this.turma});
+  PaginaPrincipal({this.nomeDeBixo, this.turma, this.bloco, this.apartamento, this.vaga});
 
   @override
   _PaginaPrincipalState createState() => _PaginaPrincipalState();
@@ -36,31 +42,14 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
   Widget build(BuildContext context) {
     nome = widget.nomeDeBixo;
     turma = widget.turma;
+    bloco = widget.bloco;
+    apartamento = widget.apartamento;
+    vaga = widget.vaga;
+
 
     return WillPopScope(
       onWillPop: () => Future.value(false),
       child: Scaffold(
-        appBar: AppBar(
-          leading: Container(),
-          title: new Text(
-            widget.nomeDeBixo + widget.turma,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 30,
-              fontFamily: "CaviarDreams",
-            ),
-          ),
-          titleSpacing: 0, //it is 16 by default
-          flexibleSpace: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [MyColors.corPrincipal, MyColors.corSecundaria],
-                begin: Alignment.bottomRight,
-                end: Alignment.topLeft,
-              ),
-            ),
-          ),
-        ),
         body: Container(
           child: _children[_selectedIndex],
         ),
