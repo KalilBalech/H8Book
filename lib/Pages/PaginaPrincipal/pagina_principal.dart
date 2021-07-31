@@ -1,4 +1,8 @@
+import 'dart:io';
+
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:h_book/Pages/PaginaPrincipal/MeusLivros.dart';
 import '../../config/my_colors.dart';
 import 'Perfil.dart';
@@ -17,7 +21,8 @@ class PaginaPrincipal extends StatefulWidget {
   final String apartamento;
   final String vaga;
 
-  PaginaPrincipal({this.nomeDeBixo, this.turma, this.bloco, this.apartamento, this.vaga});
+  PaginaPrincipal(
+      {this.nomeDeBixo, this.turma, this.bloco, this.apartamento, this.vaga});
 
   @override
   _PaginaPrincipalState createState() => _PaginaPrincipalState();
@@ -25,6 +30,7 @@ class PaginaPrincipal extends StatefulWidget {
 
 class _PaginaPrincipalState extends State<PaginaPrincipal> {
   int _selectedIndex = 0;
+  DateTime timeBackPressed = DateTime.now();
 
   final List<Widget> _children = [
     Home(),
@@ -46,32 +52,45 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
     apartamento = widget.apartamento;
     vaga = widget.vaga;
 
-
     return WillPopScope(
-      onWillPop: () => Future.value(false),
+      onWillPop: () async {
+        final difference = DateTime.now().difference(timeBackPressed);
+        final isExitWarning = difference >= Duration(seconds: 2);
+
+        timeBackPressed = DateTime.now();
+
+        if (isExitWarning) {
+          final message = 'Pressione novamente para sair';
+          Fluttertoast.showToast(
+              msg: message,
+              backgroundColor: Colors.white,
+              textColor: MyColors.corPrincipal,
+              fontSize: 18);
+          return false;
+        } else {
+          Fluttertoast.cancel();
+          exit(0);
+        }
+      },
       child: Scaffold(
         body: Container(
           child: _children[_selectedIndex],
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          selectedItemColor: MyColors.corPrincipal,
+        bottomNavigationBar: CurvedNavigationBar(
+          height: 60,
+          color: MyColors.corPrincipal,
           backgroundColor: MyColors.corBasica,
+          buttonBackgroundColor: MyColors.corPrincipal,
+          animationDuration: Duration(milliseconds: 350),
+          animationCurve: Curves.bounceInOut,
           items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: "Home",
+            Icon(
+              Icons.home,
+              color: Colors.black,
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.local_library),
-              label: "Meus livros",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person_outline_rounded),
-              label: "Perfil",
-            ),
+            Icon(Icons.local_library, color: Colors.black),
+            Icon(Icons.person_outline_rounded, color: Colors.black),
           ],
-          currentIndex: _selectedIndex,
           onTap: _onItemTap,
         ),
         backgroundColor: MyColors.corBasica,

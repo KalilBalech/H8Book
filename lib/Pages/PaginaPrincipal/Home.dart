@@ -117,7 +117,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         title: new Text(
-          nome + turma + bloco + apartamento + vaga,
+          nome + turma,
           style: TextStyle(
             color: Colors.black,
             fontSize: 30,
@@ -341,10 +341,10 @@ class _HomeState extends State<Home> {
                           );
                           Fluttertoast.showToast(
                             msg:
-                                "Solicitação de empréstimo enviada a $dono$turmaDono. Aguarde a resposta.",
-                            backgroundColor: MyColors.corPrincipal,
-                            textColor: MyColors.corSecundaria,
-                            fontSize: 16,
+                                "Solicitação enviada a $dono$turmaDono. Aguarde a resposta :)",
+                            fontSize: 18,
+                            backgroundColor: MyColors.corBasica,
+                            textColor: MyColors.corPrincipal
                           );
                         },
                       )

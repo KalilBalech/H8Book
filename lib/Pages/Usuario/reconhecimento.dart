@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:h_book/Pages/Usuario/ja_tenho_conta.dart';
 import 'package:h_book/Pages/Usuario/novo_usuario.dart';
 import '../../config/my_colors.dart';
@@ -9,10 +12,31 @@ class Reconhecimento extends StatefulWidget {
 }
 
 class _ReconhecimentoState extends State<Reconhecimento> {
+  DateTime timeBackPressed = DateTime.now();
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () => Future.value(false),
+      onWillPop: () async {
+        final difference = DateTime.now().difference(timeBackPressed);
+        final isExitWarning = difference >= Duration(seconds: 2);
+
+        timeBackPressed = DateTime.now();
+
+        if(isExitWarning){
+          final message = 'Pressione novamente para sair';
+          Fluttertoast.showToast(
+            msg: message,
+            backgroundColor: Colors.white,
+            textColor: MyColors.corPrincipal,
+            fontSize: 18
+            );
+          return false;
+        }
+        else{
+          Fluttertoast.cancel();
+          exit(0);
+        }
+      },
       child: Scaffold(
         backgroundColor: MyColors.corBasica,
         body: SafeArea(
