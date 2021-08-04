@@ -17,12 +17,8 @@ String vaga = "";
 class PaginaPrincipal extends StatefulWidget {
   final String nomeDeBixo;
   final String turma;
-  final String bloco;
-  final String apartamento;
-  final String vaga;
 
-  PaginaPrincipal(
-      {this.nomeDeBixo, this.turma, this.bloco, this.apartamento, this.vaga});
+  PaginaPrincipal({this.nomeDeBixo, this.turma});
 
   @override
   _PaginaPrincipalState createState() => _PaginaPrincipalState();
@@ -48,9 +44,6 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
   Widget build(BuildContext context) {
     nome = widget.nomeDeBixo;
     turma = widget.turma;
-    bloco = widget.bloco;
-    apartamento = widget.apartamento;
-    vaga = widget.vaga;
 
     return WillPopScope(
       onWillPop: () async {
@@ -59,15 +52,17 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
 
         timeBackPressed = DateTime.now();
 
-        if (isExitWarning) {
+        if(isExitWarning){
           final message = 'Pressione novamente para sair';
           Fluttertoast.showToast(
-              msg: message,
-              backgroundColor: Colors.white,
-              textColor: MyColors.corPrincipal,
-              fontSize: 18);
+            msg: message,
+            backgroundColor: Colors.white,
+            textColor: MyColors.corPrincipal,
+            fontSize: 18
+            );
           return false;
-        } else {
+        }
+        else{
           Fluttertoast.cancel();
           exit(0);
         }
@@ -88,8 +83,14 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
               Icons.home,
               color: Colors.black,
             ),
-            Icon(Icons.local_library, color: Colors.black),
-            Icon(Icons.person_outline_rounded, color: Colors.black),
+            Icon(
+              Icons.local_library,
+              color: Colors.black
+              ),
+            Icon(
+              Icons.person_outline_rounded,
+              color: Colors.black
+              ),
           ],
           onTap: _onItemTap,
         ),

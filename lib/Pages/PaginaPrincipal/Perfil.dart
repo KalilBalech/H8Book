@@ -349,30 +349,6 @@ mostrarAlertaEditarAp(BuildContext context) {
               if (valor.isEmpty) {
                 return 'Fala qual é o seu ap, bixão. Senão vai levar G';
               }
-              if (bloco == "A" &&
-                  (int.parse(valor) >= 143 || int.parse(valor) <= 100)) {
-                return "Número de apartamento inválido";
-              }
-              if (bloco == "B" &&
-                  (int.parse(valor) >= 242 || int.parse(valor) <= 200)) {
-                return "Número de apartamento inválido";
-              }
-              if (bloco == "C" &&
-                  (int.parse(valor) >= 331 || int.parse(valor) <= 300)) {
-                return "Número de apartamento inválido";
-              }
-              if (bloco == "D" &&
-                  (int.parse(valor) >= 209 ||
-                      (int.parse(valor) <= 200 && int.parse(valor) >= 109) ||
-                      int.parse(valor) <= 100)) {
-                return "Número de apartamento inválido";
-              }
-              if (bloco == "E" &&
-                  (int.parse(valor) >= 209 ||
-                      (int.parse(valor) <= 200 && int.parse(valor) >= 109) ||
-                      int.parse(valor) <= 100)) {
-                return "Número de apartamento inválido";
-              }
               return null;
             },
             keyboardType: TextInputType.number,

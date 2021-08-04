@@ -87,8 +87,7 @@ class _SuaBibliotecaState extends State<SuaBiblioteca> {
               iconSize: 25, 
               onPressed: (){
                 Navigator.push(
-                  context, MaterialPageRoute(builder: (context) =>  PaginaPrincipal(nomeDeBixo: widget.nomeBixo, turma: widget.turma, bloco: widget.bloco, 
-                  apartamento: widget.apartamento ,vaga: widget.vaga)
+                  context, MaterialPageRoute(builder: (context) =>  PaginaPrincipal(nomeDeBixo: widget.nomeBixo, turma: widget.turma)
                 )
               );
               }

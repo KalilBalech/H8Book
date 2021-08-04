@@ -164,7 +164,7 @@ class _PedidosRecebidosState extends State<PedidosRecebidos> {
                           'resposta': 'autorizado',
                           'bloco do dono': blocoDono,
                           'apartamento do dono': apartDono,
-                          'vaga do dono': vagaDono
+                          'vaga do dono': vagaDono             //SAO OS MEUS DADOS???
                         });
                       },
                     ),
@@ -251,9 +251,10 @@ class _PedidosRecebidosState extends State<PedidosRecebidos> {
                     listaMensagens[i]["turma do pedinte"],
                     listaMensagens[i]["nome do livro"],
                     listaMensagens[i]["autor"],
-                    listaMensagens[i]["bloco do pedinte"],
-                    listaMensagens[i]["apartamento do pedinte"],
-                    listaMensagens[i]["vaga do pedinte"]),
+                    listaMensagens[i]["bloco do dono"],
+                    listaMensagens[i]["apartamento do dono"],
+                    listaMensagens[i]["vaga do dono"]        // SAO OS MEUS DADOS???
+                ),
               i == 0
                   ? Padding(
                       padding: EdgeInsets.all(10),

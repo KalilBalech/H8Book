@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "605137982532",
+    "project_id": "h8book-7e805",
+    "storage_bucket": "h8book-7e805.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:605137982532:android:ec4531d3d79697377a1811",
+        "android_client_info": {
+          "package_name": "kalil.myapp.H8Book"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "605137982532-prq0aa4pdchqd8elt20p4bodpl6nkl76.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAlmIu8QTat-jaP4myioxqmtRwyFkVV8kQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "605137982532-prq0aa4pdchqd8elt20p4bodpl6nkl76.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

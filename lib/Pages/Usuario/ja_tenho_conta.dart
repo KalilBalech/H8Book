@@ -200,11 +200,8 @@ class _JaTenhoContaState extends State<JaTenhoConta> {
                             MaterialPageRoute(
                                 builder: (context) => PaginaPrincipal(
                                     nomeDeBixo: _nomeDeBixoInputController.text,
-                                    turma: _turmaInputController.text,
-                                    bloco: documentSnapshot['Bloco'],
-                                    apartamento: documentSnapshot['Apartamento']
-                                        .toString(),
-                                    vaga: documentSnapshot['Vaga'])));
+                                    turma: _turmaInputController.text,)
+                            ));
                         setState(() {
                           _loginInvalido = false;
                         });

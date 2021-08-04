@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:h_book/Pages/PaginaPrincipal/pagina_principal.dart';
 import '../../config/my_colors.dart';
-import 'Notificacoes.dart';
+import 'RespostasRecebidas.dart' ;
 import 'PedidosRecebidos.dart';
 
 _HomeState homeState;
@@ -22,6 +22,7 @@ class _HomeState extends State<Home> {
   Stream livros;
   int numPedidos;
   int numNotificacoes;
+  int numTotal;
   //Future _livrosLidos;
   //List _todosOsLivros = [];
   //List _listaPesquisa = [];
@@ -37,6 +38,7 @@ class _HomeState extends State<Home> {
         .collection('Usuários')
         .doc(nome + turma)
         .snapshots();
+    
 
     contarPedidos();
     contarNotificacoes();
@@ -68,6 +70,7 @@ class _HomeState extends State<Home> {
     List myDocCount = _myDoc.docs;
     setState(() {
       numPedidos = myDocCount.length;
+      numTotal = numPedidos+numNotificacoes;
     });
   }
 
@@ -80,6 +83,7 @@ class _HomeState extends State<Home> {
     List myDocCount = _myDoc.docs;
     setState(() {
       numNotificacoes = myDocCount.length;
+      numTotal = numPedidos+numNotificacoes;
     });
   }
 
@@ -116,13 +120,28 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: new Text(
-          nome + turma,
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 30,
-            fontFamily: "CaviarDreams",
-          ),
+        title: Row(
+          children: [
+            numPedidos != 0 && numPedidos != null || numNotificacoes != 0 && numNotificacoes != null?
+            CircleAvatar(
+            //radius: 12,
+            backgroundColor: Colors.red,
+            child: Text("$numPedidos+$numNotificacoes",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                )),
+          ): Container(),
+          SizedBox(width: 10),
+            Text(
+              nome + turma,
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 30,
+                fontFamily: "CaviarDreams",
+              ),
+            ),
+          ],
         ),
         titleSpacing: 0, //it is 16 by default
         flexibleSpace: Container(
@@ -161,8 +180,10 @@ class _HomeState extends State<Home> {
                     size: 35,
                   ),
                 )),
+            
             ListTile(
               title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Pedidos recebidos",
@@ -171,9 +192,6 @@ class _HomeState extends State<Home> {
                       fontSize: 20,
                       fontFamily: "CaviarDreams",
                     ),
-                  ),
-                  SizedBox(
-                    width: 5,
                   ),
                   notificacoesPedidos(),
                 ],
@@ -187,17 +205,16 @@ class _HomeState extends State<Home> {
               },
             ),
             ListTile(
-              title: Row(children: [
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
                 Text(
-                  "Notificações",
+                  "Respostas recebidas",
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 20,
                     fontFamily: "CaviarDreams",
                   ),
-                ),
-                SizedBox(
-                  width: 5,
                 ),
                 notificacoesMenu(),
               ]),
@@ -248,7 +265,7 @@ class _HomeState extends State<Home> {
   }
 
   Widget livro(String nomedolivro, String autor, String dono, String turmaDono,
-      bool disp, String bloco, String apartamento, String vaga) {
+      bool disp/*, String bloco, String apartamento, String vaga*/) {
     return Container(
       decoration: BoxDecoration(
           color: MyColors.corBasica,
@@ -297,8 +314,6 @@ class _HomeState extends State<Home> {
                 ("$nome$turma" != "$dono$turmaDono") && disp
                     ? GestureDetector(
                         child: Container(
-                          // height: 45,
-                          // width: 230,
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               colors: [
@@ -321,7 +336,17 @@ class _HomeState extends State<Home> {
                             ),
                           ),
                         ),
-                        onTap: () async {
+                        onTap: () {
+                         FirebaseFirestore.instance
+                        .collection('Usuários')
+                        .doc(dono+turmaDono)
+                        .get()
+                        .then((DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists)
+                        bloco = documentSnapshot['Bloco'];
+                        apartamento = documentSnapshot['Apartamento'].toString();
+                        vaga = documentSnapshot['Vaga'];
+                    });
                           FirebaseFirestore.instance
                               .collection("Usuários")
                               .doc(dono + turmaDono)
@@ -332,13 +357,10 @@ class _HomeState extends State<Home> {
                             'autor': autor,
                             'pedinte': nome,
                             'turma do pedinte': turma,
-                            'bloco do pedinte': bloco,
-                            'apartamento do pedinte': apartamento,
-                            'vaga do pedinte': vaga
+                            'bloco do dono': bloco,         // NA VERDADE, É BLOCO DO DONO
+                            'apartamento do dono': apartamento,         // NA VERDADE, É APARTAMENTO DO DONO
+                            'vaga do dono': vaga                 // NA VERDADE, É VAGA DO DONO
                           });
-                          await Future.delayed(
-                            Duration(seconds: 1),
-                          );
                           Fluttertoast.showToast(
                             msg:
                                 "Solicitação enviada a $dono$turmaDono. Aguarde a resposta :)",
@@ -426,11 +448,15 @@ class _HomeState extends State<Home> {
     if (numPedidos != 0 && numPedidos != null) {
       return FittedBox(
         child: Container(
-          child: Text("$numPedidos",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.redAccent,
-              )),
+          child: CircleAvatar(
+            radius: 12,
+            backgroundColor: Colors.red,
+            child: Text("$numPedidos",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                )),
+          ),
         ),
       );
     } else {
@@ -442,11 +468,15 @@ class _HomeState extends State<Home> {
     if (numNotificacoes != 0 && numNotificacoes != null) {
       return FittedBox(
         child: Container(
-          child: Text("$numNotificacoes",
-              style: TextStyle(
-                color: Colors.redAccent,
-                fontWeight: FontWeight.bold,
-              )),
+          child: CircleAvatar(
+            radius: 12,
+            backgroundColor: Colors.red,
+            child: Text("$numNotificacoes",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                )),
+          ),
         ),
       );
     } else {
@@ -493,9 +523,9 @@ class _HomeState extends State<Home> {
                     listaLivros[i]["dono"],
                     listaLivros[i]["turma do dono"],
                     listaLivros[i]["disponibilidade"],
-                    bloco,
-                    apartamento,
-                    vaga),
+                    /*bloco,            // DEVE SER O BLOCO DO DONO DO LIVRO
+                    apartamento,      // DEVE SER O APARTAMENTO DO DONO DO LIVRO
+                    vaga*/),            // DEVE SER A VAGA DO DONO DO LIVRO
               SizedBox(height: 40),
               GestureDetector(
                   child: botao("Mais livros..."),
