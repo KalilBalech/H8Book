@@ -266,156 +266,158 @@ class _HomeState extends State<Home> {
 
   Widget livro(String nomedolivro, String autor, String dono, String turmaDono,
       bool disp/*, String bloco, String apartamento, String vaga*/) {
-    return Container(
-      decoration: BoxDecoration(
-          color: MyColors.corBasica,
-          borderRadius: BorderRadius.circular(15),
-          border: Border.all(color: MyColors.corPrincipal)),
-      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      padding: EdgeInsets.symmetric(horizontal: 5),
-      child: Row(
-        children: [
-          Icon(
-            Icons.menu_book_rounded,
-            color: MyColors.corPrincipal,
-            size: 40,
-          ),
-          SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              children: [
-                Text(
-                  nomedolivro,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: "CaviarDreams",
-                  ),
-                ),
-                Text(
-                  autor,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 15,
-                    //fontWeight: FontWeight.w400,
-                    fontFamily: "CaviarDreams",
-                  ),
-                ),
-                Text(
-                  "Dono: $dono$turmaDono",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 14,
-                    //fontWeight: FontWeight.w400,
-                    fontFamily: "CaviarDreams",
-                  ),
-                ),
-                ("$nome$turma" != "$dono$turmaDono") && disp
-                    ? GestureDetector(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                MyColors.corPrincipal,
-                                MyColors.corSecundaria
-                              ],
-                              begin: Alignment.bottomRight,
-                              end: Alignment.topLeft,
+
+    return StreamBuilder<DocumentSnapshot>(
+      stream: FirebaseFirestore.instance.collection('Usuários').doc(dono + turmaDono).snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        if (snapshot.hasData) {
+        return Container(
+          decoration: BoxDecoration(
+              color: MyColors.corBasica,
+              borderRadius: BorderRadius.circular(15),
+              border: Border.all(color: MyColors.corPrincipal)),
+          margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          padding: EdgeInsets.symmetric(horizontal: 5),
+          child: Row(
+            children: [
+              Icon(
+                Icons.menu_book_rounded,
+                color: MyColors.corPrincipal,
+                size: 40,
+              ),
+              SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  children: [
+                    Text(
+                      nomedolivro,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: "CaviarDreams",
+                      ),
+                    ),
+                    Text(
+                      autor,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 15,
+                        //fontWeight: FontWeight.w400,
+                        fontFamily: "CaviarDreams",
+                      ),
+                    ),
+                    Text(
+                      "Dono: $dono$turmaDono",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        //fontWeight: FontWeight.w400,
+                        fontFamily: "CaviarDreams",
+                      ),
+                    ),
+                    ("$nome$turma" != "$dono$turmaDono") && disp
+                        ? GestureDetector(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    MyColors.corPrincipal,
+                                    MyColors.corSecundaria
+                                  ],
+                                  begin: Alignment.bottomRight,
+                                  end: Alignment.topLeft,
+                                ),
+                                borderRadius: BorderRadius.circular(50),
+                              ),
+                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              margin: EdgeInsets.symmetric(vertical: 10),
+                              child: Text(
+                                "Pedir emprestado",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18,
+                                  fontFamily: "CaviarDreams",
+                                ),
+                              ),
                             ),
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                          padding: EdgeInsets.symmetric(horizontal: 10),
-                          margin: EdgeInsets.symmetric(vertical: 10),
-                          child: Text(
-                            "Pedir emprestado",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 18,
-                              fontFamily: "CaviarDreams",
+                            onTap: () {
+                             bloco = snapshot.data["Bloco"];
+                             apartamento = snapshot.data["Apartamento"].toString();
+                             vaga = snapshot.data["Vaga"];
+                              FirebaseFirestore.instance
+                                  .collection('Usuários')
+                                  .doc(dono + turmaDono)
+                                  .collection("Pedidos recebidos")
+                                  .doc(nomedolivro + nome + turma)
+                                  .set({
+                                'nome do livro': nomedolivro,
+                                'autor': autor,
+                                'pedinte': nome,
+                                'turma do pedinte': turma,
+                                'bloco do dono': bloco,         
+                                'apartamento do dono': apartamento,        
+                                'vaga do dono': vaga                 
+                              });
+                              Fluttertoast.showToast(
+                                msg:
+                                    "Solicitação enviada a $dono$turmaDono. Aguarde a resposta :)",
+                                fontSize: 18,
+                                backgroundColor: MyColors.corBasica,
+                                textColor: MyColors.corPrincipal
+                              );
+                            },
+                          )
+                        : Container(),
+                    ("$nome$turma" != "$dono$turmaDono") && !disp
+                        ? Container(
+                            // height: 45,
+                            // width: 230,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(50),
                             ),
-                          ),
-                        ),
-                        onTap: () {
-                         FirebaseFirestore.instance
-                        .collection('Usuários')
-                        .doc(dono+turmaDono)
-                        .get()
-                        .then((DocumentSnapshot documentSnapshot) {
-                        if (documentSnapshot.exists)
-                        bloco = documentSnapshot['Bloco'];
-                        apartamento = documentSnapshot['Apartamento'].toString();
-                        vaga = documentSnapshot['Vaga'];
-                    });
-                          FirebaseFirestore.instance
-                              .collection("Usuários")
-                              .doc(dono + turmaDono)
-                              .collection("Pedidos recebidos")
-                              .doc(nomedolivro + nome + turma)
-                              .set({
-                            'nome do livro': nomedolivro,
-                            'autor': autor,
-                            'pedinte': nome,
-                            'turma do pedinte': turma,
-                            'bloco do dono': bloco,         // NA VERDADE, É BLOCO DO DONO
-                            'apartamento do dono': apartamento,         // NA VERDADE, É APARTAMENTO DO DONO
-                            'vaga do dono': vaga                 // NA VERDADE, É VAGA DO DONO
-                          });
-                          Fluttertoast.showToast(
-                            msg:
-                                "Solicitação enviada a $dono$turmaDono. Aguarde a resposta :)",
-                            fontSize: 18,
-                            backgroundColor: MyColors.corBasica,
-                            textColor: MyColors.corPrincipal
-                          );
-                        },
-                      )
-                    : Container(),
-                ("$nome$turma" != "$dono$turmaDono") && !disp
-                    ? Container(
-                        // height: 45,
-                        // width: 230,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        margin: EdgeInsets.symmetric(vertical: 10),
-                        child: Text(
-                          "Já foi emprestado :(",
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontSize: 18,
-                            fontFamily: "CaviarDreams",
-                          ),
-                        ),
-                      )
-                    : Container(),
-                "$nome$turma" == "$dono$turmaDono"
-                    ? Container(
-                        // height: 45,
-                        // width: 230,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        margin: EdgeInsets.symmetric(vertical: 10),
-                        child: Text(
-                          "Pedir emprestado",
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 18,
-                            fontFamily: "CaviarDreams",
-                          ),
-                        ),
-                      )
-                    : Container()
-              ],
-            ),
+                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            margin: EdgeInsets.symmetric(vertical: 10),
+                            child: Text(
+                              "Já foi emprestado :(",
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontSize: 18,
+                                fontFamily: "CaviarDreams",
+                              ),
+                            ),
+                          )
+                        : Container(),
+                    "$nome$turma" == "$dono$turmaDono"
+                        ? Container(
+                            // height: 45,
+                            // width: 230,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[200],
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            margin: EdgeInsets.symmetric(vertical: 10),
+                            child: Text(
+                              "Pedir emprestado",
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 18,
+                                fontFamily: "CaviarDreams",
+                              ),
+                            ),
+                          )
+                        : Container()
+                  ],
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      }
+      return CircularProgressIndicator();
+      }
     );
   }
 
