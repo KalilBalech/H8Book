@@ -1,7 +1,6 @@
-# h_book
+# H8Book
 
-A new Flutter project.
-
+This is a mobile application that supports book sharing among students in my university's dormitory
 ## Getting Started
 
 This project is a starting point for a Flutter application.
